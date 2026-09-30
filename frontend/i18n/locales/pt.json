@@ -8,6 +8,14 @@
     "about": "Sobre",
     "contact": "Contato"
   },
+  "notFound": {
+    "title": "Página não encontrada :/",
+    "description": "Mas tudo bem, eu pensei nessa possibilidade.",
+    "backHome": "Voltar para a Home",
+    "contact": "Entrar em contato",
+    "randomProjectIntro": "Ou confira um projeto aleatório:",
+    "randomProject": "Ver projeto aleatório: {title}"
+  },
   "contact": {
     "title": "Toda boa ideia começa com uma boa história",
     "introPrefix": "O contato pode ser feito via",

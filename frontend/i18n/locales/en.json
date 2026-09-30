@@ -8,6 +8,14 @@
     "about": "About",
     "contact": "Contact"
   },
+  "notFound": {
+    "title": "Page not found :/",
+    "description": "That is okay, I thought this might happen.",
+    "backHome": "Back to home",
+    "contact": "Get in touch",
+    "randomProjectIntro": "Or check out a random project:",
+    "randomProject": "View random project: {title}"
+  },
   "contact": {
     "title": "Every good idea starts with a good story",
     "introPrefix": "You can get in touch via",

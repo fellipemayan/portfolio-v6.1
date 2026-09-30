@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { useLocalePath } from '#imports'
+import { useI18n, useLocalePath } from '#imports'
 
+const { t } = useI18n()
 const localePath = useLocalePath()
 
 const projects = [
@@ -11,7 +12,7 @@ const projects = [
   { title: 'MISplica', slug: 'misplica' } 
 ]
 
-const randomProject = ref(projects[0])
+const randomProject = ref(projects[0]!)
 
 onMounted(() => {
   const randomIndex = Math.floor(Math.random() * projects.length)
@@ -30,36 +31,36 @@ onMounted(() => {
       </MotionSlideUp>
 
       <MotionSlideUp :delay="0.1">
-        <h1>Página não encontrada :/</h1>
+        <h1>{{ t('notFound.title') }}</h1>
       </MotionSlideUp>
       
       <MotionSlideUp :delay="0.2">
-        <p>Mas tudo bem, eu pensei nessa possibilidade.</p>
+        <p>{{ t('notFound.description') }}</p>
       </MotionSlideUp>
 
       <MotionSlideUp :delay="0.3" style="margin-top: 2rem; display: flex; flex-direction: column; gap: 1rem; align-items: center;">
         <div class="backup-link">
           <NuxtLink class="btn four-o-four-link" :to="localePath('/')">
-            Voltar para a Home
+            {{ t('notFound.backHome') }}
           </NuxtLink>
         </div>
 
         <div class="backup-link">
           <NuxtLink class="btn four-o-four-link" :to="localePath('/contato')">
-            Entrar em contato
+            {{ t('notFound.contact') }}
           </NuxtLink>
         </div>
       </MotionSlideUp>
       
       <MotionSlideUp :delay="0.4" style="margin-top: 4rem;">
-        <h2 class="or-text">Ou confira um projeto aleatório:</h2>
+        <h2 class="or-text">{{ t('notFound.randomProjectIntro') }}</h2>
         <ul class="single-project-list" style="list-style: none; padding: 0;">
           <li>
             <NuxtLink
               :to="localePath(`/projetos/${randomProject.slug}`)"
               class="btn four-o-four-link"
             >
-              Ver projeto aleatório: {{ randomProject.title }}
+              {{ t('notFound.randomProject', { title: randomProject.title }) }}
             </NuxtLink>
           </li>
         </ul>
