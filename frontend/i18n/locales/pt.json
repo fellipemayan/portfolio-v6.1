@@ -8,11 +8,145 @@
     "about": "Sobre",
     "contact": "Contato"
   },
+  "contact": {
+    "title": "Toda boa ideia começa com uma boa história",
+    "introPrefix": "O contato pode ser feito via",
+    "emailLink": "e-mail",
+    "introSuffix": ", pelas minhas redes sociais ou através do formulário abaixo.",
+    "emailCopied": "E-mail copiado para a área de transferência!",
+    "nameLabel": "Como você se chama?",
+    "namePlaceholder": "Seu nome",
+    "emailLabel": "E-mail para contato",
+    "emailPlaceholder": "seu{'@'}email.com",
+    "servicesLabel": "O que você está buscando?",
+    "services": {
+      "uiUx": "UI/UX Design",
+      "frontend": "Front-end",
+      "graphicDesign": "Design Gráfico",
+      "consulting": "Consultoria / Outro"
+    },
+    "budgetLabel": "Orçamento estimado",
+    "selectBudget": "Selecione uma faixa...",
+    "budget": {
+      "under3000": "Menos de R$ 3.000",
+      "from3000To8000": "R$ 3.000 - R$ 8.000",
+      "from8000To15000": "R$ 8.000 - R$ 15.000",
+      "over15000": "Mais de R$ 15.000"
+    },
+    "timelineLabel": "Prazo ideal",
+    "selectTimeline": "Selecione um prazo...",
+    "timeline": {
+      "asSoonAsPossible": "O quanto antes",
+      "oneToTwoMonths": "1 a 2 meses",
+      "threeToSixMonths": "3 a 6 meses",
+      "noRush": "Sem pressa"
+    },
+    "messageLabel": "Detalhes do projeto",
+    "messagePlaceholder": "Descreva brevemente a ideia que gostaria de discutir...",
+    "submit": "Enviar mensagem",
+    "submitLoading": "Enviando...",
+    "submitSuccess": "Enviado!",
+    "submitError": "Verifique os campos"
+  },
+  "about": {
+    "title": "Designer, desenvolvedor, pesquisador e artista nas horas vagas",
+    "introBeforeYears": "Há pouco mais de",
+    "years": "6 anos",
+    "introAfterYears": "atuando com design, pondero profundamente a integração entre pessoas, sistemas e empresas. Atualmente, foco em alinhar conhecimentos de programação para documentar processos e projetar sistemas de informação que sobrevivam ao tempo e à escala.",
+    "endeavorsIntro": "Além de design e programação, estou:",
+    "endeavors": {
+      "reactAccessibility": "Aprofundando em React e padrões de acessibilidade (visual e código)",
+      "writingArticles": "Escrevendo artigos sobre IHC e Comunicabilidade",
+      "readingMemorias": "(Ainda) lendo Memórias de um Sargento de Milícias",
+      "exploringFiarlongo": "Explorando Fiarlongo em Silksong"
+    },
+    "experienceTitle": "Experiência",
+    "present": "Presente",
+    "experience": {
+      "productDesigner": "Product Designer",
+      "independentProjects": "Projetos Independentes",
+      "remote": "Remoto",
+      "cearaBrazil": "Ceará, Brasil",
+      "description": "Atuação na concepção e desenvolvimento de aplicações web, sistemas de design e interfaces focadas em experiência do usuário."
+    },
+    "educationTitle": "Educação",
+    "education": {
+      "digitalDesign": "Design Digital (Graduação)",
+      "ufc": "Universidade Federal do Ceará (UFC - Quixadá)",
+      "digitalDesignDescription": "Foco em interação, design de interfaces e avaliação de comunicabilidade.",
+      "uxPostgraduate": "Pós-graduação EAD em UX",
+      "pucrs": "PUCRS",
+      "uxPostgraduateDescription": "Aprofundamento em metodologias avançadas de Experiência do Usuário."
+    },
+    "researchTitle": "Pesquisa",
+    "research": {
+      "zoteroTitle": "Avaliação da Comunicabilidade do Zotero",
+      "academicResearch": "Pesquisa Acadêmica / TCC",
+      "ufcQuixada": "UFC Quixadá",
+      "description": "Investigação de práticas de gestão de referências utilizando o Método de Inspeção Semiótica (MIS) e MAC."
+    },
+    "ctaTitle": "Em busca de design que conversa com código?",
+    "ctaDescription": "Estou sempre aberto a discutir novos projetos, ideias criativas ou oportunidades de colaboração. Sinta-se à vontade para me enviar uma mensagem!",
+    "ctaContact": "Entrar em contato"
+  },
+  "projects": {
+    "title": "Projetos",
+    "description": "Um compilado de estudos de caso, experimentos e ferramentas.",
+    "gridView": "Visualização em grade",
+    "listView": "Visualização em lista",
+    "viewProjectAria": "Ver projeto: {title}",
+    "viewProject": "Ver projeto",
+    "comingSoon": "Em breve...",
+    "missingImage": "Sem imagem",
+    "loadMore": "Carregar mais projetos",
+    "vagabuilderDescription": "Gerenciador de personagens responsivo com wizard passo-a-passo.",
+    "vagabuilderAlt": "Interface do VagaBuilder",
+    "caixotimDescription": "Indexador e organizador de fontes com sistema de tags customizadas.",
+    "caixotimAlt": "Conceito do Caixotim"
+  },
+  "project": {
+    "comingSoonTitle": "Projeto em breve!",
+    "comingSoonDescription": "Este projeto ainda não está disponível para visualização. Volte em breve para mais novidades.",
+    "seeAnother": "Veja outro projeto:",
+    "suggestedProject": "Projeto sugerido",
+    "back": "Voltar",
+    "summary": "Sumário do projeto (mock)",
+    "year": "Ano",
+    "duration": "Duração",
+    "role": "Papel",
+    "tools": "Ferramentas",
+    "viewProject": "Veja o projeto",
+    "ctaTitle": "Gostou do projeto?",
+    "ctaDescription": "Estou sempre aberto a discutir novos projetos, ideias criativas ou oportunidades de colaboração. Sinta-se à vontade para me enviar uma mensagem!",
+    "sendMessage": "Enviar mensagem",
+    "nextProject": "Próximo projeto →"
+  },
   "home": {
     "fallbackTitle": "Bem-vindo ao meu portfólio",
+     "heroSubtitle": "Product Designer & Developer focado em interfaces digitais, sistemas e experiências interativas.",
+     "skills": {
+       "informationArchitecture": "Arquitetura da Informação",
+       "uxUi": "UX/UI",
+       "graphicEditorial": "Gráfico & Editorial",
+       "frontend": "Front-end"
+     },
+     "resume": "Currículo",
     "viewProjects": "Ver projetos",
     "featuredProjects": "Projetos em destaque",
-    "viewAll": "Ver todos"
+     "viewAll": "Ver todos",
+     "projects": {
+       "misplica": {
+         "category": "Ferramenta educacional / UX",
+         "description": "Aplicação interativa para o ensino do Método de Inspeção Semiótica."
+       },
+       "vagabuilder": {
+         "category": "RPG de mesa / Aplicação web",
+         "description": "Gerenciador de personagens responsivo para o sistema Vagabond."
+       }
+     },
+     "ctaTitle": "Vamos criar algo juntos?",
+     "ctaDescription": "Estou disponível para conversar sobre novos projetos e colaborações.",
+     "ctaContact": "Entre em contato"
   },
   "footer": {
     "backToTop": "Voltar ao topo",

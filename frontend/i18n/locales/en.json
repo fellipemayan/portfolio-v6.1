@@ -8,11 +8,145 @@
     "about": "About",
     "contact": "Contact"
   },
+  "contact": {
+    "title": "Every good idea starts with a good story",
+    "introPrefix": "You can get in touch via",
+    "emailLink": "email",
+    "introSuffix": ", through my social networks, or using the form below.",
+    "emailCopied": "Email copied to the clipboard!",
+    "nameLabel": "What is your name?",
+    "namePlaceholder": "Your name",
+    "emailLabel": "Contact email",
+    "emailPlaceholder": "you{'@'}email.com",
+    "servicesLabel": "What are you looking for?",
+    "services": {
+      "uiUx": "UI/UX Design",
+      "frontend": "Front-end",
+      "graphicDesign": "Graphic Design",
+      "consulting": "Consulting / Other"
+    },
+    "budgetLabel": "Estimated budget",
+    "selectBudget": "Select a range...",
+    "budget": {
+      "under3000": "Under R$ 3,000",
+      "from3000To8000": "R$ 3,000 - R$ 8,000",
+      "from8000To15000": "R$ 8,000 - R$ 15,000",
+      "over15000": "Over R$ 15,000"
+    },
+    "timelineLabel": "Ideal timeline",
+    "selectTimeline": "Select a timeline...",
+    "timeline": {
+      "asSoonAsPossible": "As soon as possible",
+      "oneToTwoMonths": "1 to 2 months",
+      "threeToSixMonths": "3 to 6 months",
+      "noRush": "No rush"
+    },
+    "messageLabel": "Project details",
+    "messagePlaceholder": "Briefly describe the idea you would like to discuss...",
+    "submit": "Send message",
+    "submitLoading": "Sending...",
+    "submitSuccess": "Sent!",
+    "submitError": "Check the fields"
+  },
+  "about": {
+    "title": "Designer, developer, researcher, and artist in my spare time",
+    "introBeforeYears": "For a little over",
+    "years": "6 years",
+    "introAfterYears": "working with design, I have been deeply considering the integration between people, systems, and companies. I currently focus on combining programming knowledge to document processes and design information systems that stand the test of time and scale.",
+    "endeavorsIntro": "Beyond design and programming, I am:",
+    "endeavors": {
+      "reactAccessibility": "Deepening my knowledge of React and accessibility patterns (visual and code)",
+      "writingArticles": "Writing articles about HCI and Communicability",
+      "readingMemorias": "(Still) reading Memórias de um Sargento de Milícias",
+      "exploringFiarlongo": "Exploring Fiarlongo in Silksong"
+    },
+    "experienceTitle": "Experience",
+    "present": "Present",
+    "experience": {
+      "productDesigner": "Product Designer",
+      "independentProjects": "Independent Projects",
+      "remote": "Remote",
+      "cearaBrazil": "Ceará, Brazil",
+      "description": "Working on the conception and development of web applications, design systems, and user experience-focused interfaces."
+    },
+    "educationTitle": "Education",
+    "education": {
+      "digitalDesign": "Digital Design (Bachelor's Degree)",
+      "ufc": "Federal University of Ceará (UFC - Quixadá)",
+      "digitalDesignDescription": "Focused on interaction, interface design, and communicability evaluation.",
+      "uxPostgraduate": "Online Postgraduate Degree in UX",
+      "pucrs": "PUCRS",
+      "uxPostgraduateDescription": "Deepening knowledge of advanced User Experience methodologies."
+    },
+    "researchTitle": "Research",
+    "research": {
+      "zoteroTitle": "Zotero Communicability Evaluation",
+      "academicResearch": "Academic Research / Undergraduate Thesis",
+      "ufcQuixada": "UFC Quixadá",
+      "description": "Investigation of reference management practices using the Semiotic Inspection Method (SIM) and MAC."
+    },
+    "ctaTitle": "Looking for design that speaks to code?",
+    "ctaDescription": "I am always open to discussing new projects, creative ideas, or collaboration opportunities. Feel free to send me a message!",
+    "ctaContact": "Get in touch"
+  },
+  "projects": {
+    "title": "Projects",
+    "description": "A collection of case studies, experiments, and tools.",
+    "gridView": "Grid view",
+    "listView": "List view",
+    "viewProjectAria": "View project: {title}",
+    "viewProject": "View project",
+    "comingSoon": "Coming soon...",
+    "missingImage": "No image",
+    "loadMore": "Load more projects",
+    "vagabuilderDescription": "Responsive character manager with a step-by-step wizard.",
+    "vagabuilderAlt": "VagaBuilder interface",
+    "caixotimDescription": "Source indexer and organizer with a custom tagging system.",
+    "caixotimAlt": "Caixotim concept"
+  },
+  "project": {
+    "comingSoonTitle": "Project coming soon!",
+    "comingSoonDescription": "This project is not available for viewing yet. Come back soon for more updates.",
+    "seeAnother": "See another project:",
+    "suggestedProject": "Suggested project",
+    "back": "Back",
+    "summary": "Project summary (mock)",
+    "year": "Year",
+    "duration": "Duration",
+    "role": "Role",
+    "tools": "Tools",
+    "viewProject": "View project",
+    "ctaTitle": "Like this project?",
+    "ctaDescription": "I am always open to discussing new projects, creative ideas, or collaboration opportunities. Feel free to send me a message!",
+    "sendMessage": "Send message",
+    "nextProject": "Next project →"
+  },
   "home": {
     "fallbackTitle": "Welcome to my portfolio",
+     "heroSubtitle": "Product Designer & Developer focused on digital interfaces, systems, and interactive experiences.",
+     "skills": {
+       "informationArchitecture": "Information Architecture",
+       "uxUi": "UX/UI",
+       "graphicEditorial": "Graphic & Editorial",
+       "frontend": "Front-end"
+     },
+     "resume": "Resume",
     "viewProjects": "View projects",
     "featuredProjects": "Featured projects",
-    "viewAll": "View all"
+     "viewAll": "View all",
+     "projects": {
+       "misplica": {
+         "category": "Educational Tool / UX",
+         "description": "Interactive application for teaching the Semiotic Inspection Method."
+       },
+       "vagabuilder": {
+         "category": "Tabletop RPG / Web App",
+         "description": "Responsive character manager for the Vagabond system."
+       }
+     },
+     "ctaTitle": "Let's create something together?",
+     "ctaDescription": "I am available to talk about new projects and collaborations.",
+     "ctaContact": "Get in touch"
   },
   "footer": {
     "backToTop": "Back to top",
