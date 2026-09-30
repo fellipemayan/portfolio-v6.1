@@ -16,7 +16,7 @@ const randomProject = ref(projects[0]!)
 
 onMounted(() => {
   const randomIndex = Math.floor(Math.random() * projects.length)
-  randomProject.value = projects[randomIndex]
+  // randomProject.value = projects[randomIndex]
 })
 </script>
 

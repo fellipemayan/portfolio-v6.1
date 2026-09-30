@@ -3,7 +3,8 @@ import { ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n, useLocalePath } from '#imports'
 import { PortableText } from '@portabletext/vue'
-import { ArrowLeftIcon, ArrowRightIcon, ListBulletIcon, XMarkIcon } from '@heroicons/vue/20/solid'
+import { ArrowLeftIcon, ArrowRightIcon
+  , ListBulletIcon, XMarkIcon } from '@heroicons/vue/20/solid'
 import { h } from 'vue'
 
 const route = useRoute()
