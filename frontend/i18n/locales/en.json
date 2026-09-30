@@ -1,0 +1,39 @@
+{
+  "header": {
+    "available": "Available for work",
+    "toggleTheme": "Toggle theme"
+  },
+  "nav": {
+    "projects": "Projects",
+    "about": "About",
+    "contact": "Contact"
+  },
+  "home": {
+    "fallbackTitle": "Welcome to my portfolio",
+    "viewProjects": "View projects",
+    "featuredProjects": "Featured projects",
+    "viewAll": "View all"
+  },
+  "footer": {
+    "backToTop": "Back to top",
+    "location": "Quixadá–CE",
+    "currentTime": "It is currently {time}",
+    "weatherPrefix": "The weather is",
+    "weatherSuffix": ", and it is {temp}°C",
+    "copyright": "Copyright & Co.",
+    "language": "Language",
+    "animations": "Animations",
+    "animationDefault": "Default",
+    "animationReduced": "Reduced",
+    "createdWith": "This portfolio was built with",
+    "createdWithSuffix": "with Vue and CSS.",
+    "iconsPrefix": "The icons used are from the",
+    "motionPrefix": "The animations were implemented with",
+    "sourcePrefix": "The source code is available on",
+    "fontsPrefix": "The fonts used in this project are",
+    "and": "and",
+    "version": "6.0.0",
+    "lastUpdated": "Last updated on {date}",
+    "changelog": "View changelog"
+  }
+}

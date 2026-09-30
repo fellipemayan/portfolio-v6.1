@@ -1,0 +1,39 @@
+{
+  "header": {
+    "available": "Disponível para projetos",
+    "toggleTheme": "Alternar tema"
+  },
+  "nav": {
+    "projects": "Projetos",
+    "about": "Sobre",
+    "contact": "Contato"
+  },
+  "home": {
+    "fallbackTitle": "Bem-vindo ao meu portfólio",
+    "viewProjects": "Ver projetos",
+    "featuredProjects": "Projetos em destaque",
+    "viewAll": "Ver todos"
+  },
+  "footer": {
+    "backToTop": "Voltar ao topo",
+    "location": "Quixadá–CE",
+    "currentTime": "No momento são {time}",
+    "weatherPrefix": "O clima está",
+    "weatherSuffix": ", e fazem {temp}°C",
+    "copyright": "Copyright & Afins.",
+    "language": "Idioma",
+    "animations": "Animações",
+    "animationDefault": "Padrão",
+    "animationReduced": "Reduzidas",
+    "createdWith": "Este portfólio foi criado usando",
+    "createdWithSuffix": "com Vue e CSS.",
+    "iconsPrefix": "Os ícones usados são da biblioteca",
+    "motionPrefix": "As animações foram implementadas com",
+    "sourcePrefix": "O código-fonte está disponível no",
+    "fontsPrefix": "Os tipos utilizados nesse projeto foram",
+    "and": "e",
+    "version": "6.0.0",
+    "lastUpdated": "Última atualização em {date}",
+    "changelog": "Changelog"
+  }
+}
