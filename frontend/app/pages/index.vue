@@ -1,11 +1,13 @@
 <script setup lang="ts">
-import { useI18n, useLocalePath } from '#imports'
+import { computed, h } from 'vue'
+import { useFetch, useI18n, useLocalePath } from '#imports'
+import { PortableText } from '@portabletext/vue'
 
-const { t } = useI18n()
+const { locale, t } = useI18n()
 const localePath = useLocalePath()
 
 // Dados estáticos locais (fallback) para estruturar a interface
-const featuredProjects = ref([
+const fallbackProjects = [
   {
     slug: 'misplica',
     title: 'MISplica',
@@ -22,9 +24,66 @@ const featuredProjects = ref([
     thumbnailImage: { horizontal: { asset: { url: '/images/projects/vagabuilder.jpg' } } },
     tags: ['JavaScript', 'Vue', 'Design System']
   }
-])
+]
 
-const resumeUrl = ref('/files/cv-fellipe-mayan.pdf')
+type HomePageData = {
+  hero?: {pt?: any[]; en?: any[]}
+  resume?: {pt?: string; en?: string}
+}
+
+type HomeResponse = {
+  homePage?: {hero?: {pt?: any[]; en?: any[]}; resumePt?: string; resumeEn?: string}
+  projects?: any[]
+}
+
+const { data: homeData } = await useFetch<HomeResponse>('/api/home')
+const sanityProjects = computed(() => homeData.value?.projects || [])
+const homePage = computed(() => {
+  const page = homeData.value?.homePage
+  if (!page) return null
+  return {
+    hero: page.hero,
+    resume: {pt: page.resumePt, en: page.resumeEn},
+  } as HomePageData
+})
+
+const getLocalized = (value: any) => {
+  if (!value) return ''
+  if (typeof value === 'string') return value
+  return value[locale.value] || value.pt || value.en || ''
+}
+
+const featuredProjects = computed(() => {
+  const source = sanityProjects.value?.length ? sanityProjects.value : fallbackProjects
+
+  return source.map((project) => ({
+    ...project,
+    slug: typeof project.slug === 'string' ? project.slug : project.slug?.current,
+    title: getLocalized(project.title),
+    category: getLocalized(project.category),
+    description: getLocalized(project.description),
+    tags: project.tags?.map((tag: any) => getLocalized(tag.title || tag)) || [],
+    thumbnailImage: project.thumbnailHorizontalUrl ? {
+      horizontal: {asset: {url: project.thumbnailHorizontalUrl}},
+      alt: getLocalized(project.thumbnailAlt),
+    } : project.thumbnailImage,
+  }))
+})
+
+const localizedHeroContent = computed(() => homePage.value?.hero?.[locale.value as 'pt' | 'en'] || homePage.value?.hero?.pt || [])
+const resumeUrl = computed(() => homePage.value?.resume?.[locale.value as 'pt' | 'en'] || homePage.value?.resume?.pt || '/files/cv-fellipe-mayan.pdf')
+
+const heroPortableTextComponents = {
+  block: {
+    h1: (_: any, {slots}: any) => h('h1', {class: 'hero-title'}, slots.default?.()),
+    h2: (_: any, {slots}: any) => h('h2', {class: 'hero-subtitle'}, slots.default?.()),
+    normal: (_: any, {slots}: any) => h('p', {class: 'hero-subtitle'}, slots.default?.()),
+  },
+  marks: {
+    em: (_: any, {slots}: any) => h('em', slots.default?.()),
+    spanId: (props: any, {slots}: any) => h('span', {id: props.value.id}, slots.default?.()),
+  },
+}
 </script>
 
 <template>
@@ -32,10 +91,13 @@ const resumeUrl = ref('/files/cv-fellipe-mayan.pdf')
     <!-- Seção Hero com Animação -->
     <MotionSlideUp :delay="0">
       <section class="hero-section">
-        <h1 class="hero-title">{{ t('home.fallbackTitle') }}</h1>
-        <p class="hero-subtitle">
-           {{ t('home.heroSubtitle') }}
-        </p>
+        <template v-if="localizedHeroContent.length">
+          <PortableText :value="localizedHeroContent" :components="heroPortableTextComponents" />
+        </template>
+        <template v-else>
+          <h1 class="hero-title">{{ t('home.fallbackTitle') }}</h1>
+          <p class="hero-subtitle">{{ t('home.heroSubtitle') }}</p>
+        </template>
         <ul >
            <li>{{ t('home.skills.informationArchitecture') }}</li>
            <li>{{ t('home.skills.uxUi') }}</li>
@@ -67,7 +129,7 @@ const resumeUrl = ref('/files/cv-fellipe-mayan.pdf')
           <div v-for="project in featuredProjects" :key="project.slug" class="project-card">
             <div class="project-image-wrapper">
               <NuxtImg 
-                :src="project.thumbnailImage.horizontal.asset.url" 
+                :src="project.thumbnailImage?.horizontal?.asset?.url || '/images/projects/misplica.jpg'" 
                 :alt="project.title"
                 width="600"
                 height="400"
@@ -75,9 +137,13 @@ const resumeUrl = ref('/files/cv-fellipe-mayan.pdf')
               />
             </div>
             <div class="project-info">
-               <span class="project-category">{{ t(`home.projects.${project.categoryKey}`) }}</span>
-              <h3>{{ project.title }}</h3>
-               <p>{{ t(`home.projects.${project.descriptionKey}`) }}</p>
+               <span class="project-category">{{ project.category || t(`home.projects.${project.categoryKey}`) }}</span>
+              <h3>
+                <NuxtLink :to="localePath(`/projetos/${project.slug}`)">
+                  {{ project.title }}
+                </NuxtLink>
+              </h3>
+               <p>{{ project.description || t(`home.projects.${project.descriptionKey}`) }}</p>
               
               <div class="project-tags">
                 <span v-for="tag in project.tags" :key="tag" class="tag">{{ tag }}</span>

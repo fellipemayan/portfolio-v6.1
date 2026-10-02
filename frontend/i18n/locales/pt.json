@@ -93,6 +93,8 @@
       "ufcQuixada": "UFC Quixadá",
       "description": "Investigação de práticas de gestão de referências utilizando o Método de Inspeção Semiótica (MIS) e MAC."
     },
+    "viewPublication": "Ver publicação",
+    "clientsTitle": "Clientes",
     "ctaTitle": "Em busca de design que conversa com código?",
     "ctaDescription": "Estou sempre aberto a discutir novos projetos, ideias criativas ou oportunidades de colaboração. Sinta-se à vontade para me enviar uma mensagem!",
     "ctaContact": "Entrar em contato"
@@ -127,7 +129,18 @@
     "ctaTitle": "Gostou do projeto?",
     "ctaDescription": "Estou sempre aberto a discutir novos projetos, ideias criativas ou oportunidades de colaboração. Sinta-se à vontade para me enviar uma mensagem!",
     "sendMessage": "Enviar mensagem",
-    "nextProject": "Próximo projeto →"
+    "nextProject": "Próximo projeto →",
+    "passwordTitle": "Projeto protegido",
+    "passwordDescription": "Este projeto é reservado. Informe a senha para continuar.",
+    "passwordLabel": "Senha de acesso",
+    "passwordChecking": "Verificando...",
+    "passwordSubmit": "Acessar projeto",
+    "passwordError": "Não foi possível validar a senha.",
+    "requestPassword": "Solicitar acesso"
+  },
+  "changelog": {
+    "title": "Changelog",
+    "empty": "Nenhuma atualização publicada ainda."
   },
   "home": {
     "fallbackTitle": "Bem-vindo ao meu portfólio",

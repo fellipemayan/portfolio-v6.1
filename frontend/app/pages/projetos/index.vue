@@ -1,17 +1,17 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { useI18n, useLocalePath } from '#imports'
+import { useFetch, useI18n, useLocalePath } from '#imports'
 import { Squares2X2Icon, Bars4Icon } from '@heroicons/vue/20/solid'
 
 const router = useRouter()
-const { t } = useI18n()
+const { locale, t } = useI18n()
 const localePath = useLocalePath()
 
 const viewStyle = ref<'grid' | 'list'>('grid')
 const displayLimit = ref(6)
 
-const projects = ref([
+const fallbackProjects = [
   {
     slug: 'vagabuilder',
     title: 'VagaBuilder',
@@ -39,16 +39,48 @@ const projects = ref([
       horizontal: { asset: { url: 'https://placehold.co/800x450/111/FFF?text=Em+breve' } }
     }
   }
-])
+]
+
+const { data: sanityProjects } = await useFetch<any[]>('/api/projects')
+
+const getLocalized = (value: any) => {
+  if (!value) return ''
+  if (typeof value === 'string') return value
+  return value[locale.value] || value.pt || value.en || ''
+}
+
+const projects = computed(() => {
+  const source = sanityProjects.value?.length ? sanityProjects.value : fallbackProjects
+
+  return source.map((project: any) => ({
+    ...project,
+    slug: typeof project.slug === 'string' ? project.slug : project.slug?.current,
+    title: getLocalized(project.title),
+    description: getLocalized(project.description),
+    tags: project.tags?.map((tag: any) => getLocalized(tag.title || tag)) || [],
+    externalLinks: project.externalLinks?.map((link: any) => ({
+      ...link,
+      label: getLocalized(link.label),
+    })) || [],
+    thumbnailImage: project.thumbnailHorizontalUrl || project.thumbnailVerticalUrl ? {
+      horizontal: project.thumbnailHorizontalUrl ? {asset: {url: project.thumbnailHorizontalUrl}} : undefined,
+      vertical: project.thumbnailVerticalUrl ? {asset: {url: project.thumbnailVerticalUrl}} : undefined,
+      alt: getLocalized(project.thumbnailAlt),
+    } : project.thumbnailImage ? {
+      ...project.thumbnailImage,
+      alt: getLocalized(project.thumbnailImage.alt),
+    } : undefined,
+  }))
+})
 
 const visibleProjects = computed(() => {
   return projects.value
-    .filter(p => p.isVisible !== false)
+    .filter((p: any) => p.isVisible !== false)
     .slice(0, displayLimit.value)
 })
 
 const hasMoreProjects = computed(() => {
-  const totalVisible = projects.value.filter(p => p.isVisible !== false).length
+  const totalVisible = projects.value.filter((p: any) => p.isVisible !== false).length
   return displayLimit.value < totalVisible
 })
 
@@ -132,7 +164,7 @@ const navigateToProject = (slug: string, isComingSoon: boolean, e: Event) => {
               />
               <img 
                 :src="project.thumbnailImage?.horizontal?.asset?.url || project.thumbnailImage?.vertical?.asset?.url" 
-                :alt="t(`projects.${project.thumbnailImage?.altKey || 'missingImage'}`)"
+                :alt="project.thumbnailImage?.alt || t('projects.missingImage')"
                 class="thumbnail" 
                 loading="lazy"
                 :data-cursor-text="project.isComingSoon ? t('projects.comingSoon') : t('projects.viewProject')"
@@ -165,7 +197,7 @@ const navigateToProject = (slug: string, isComingSoon: boolean, e: Event) => {
               </li>
             </ul>
             
-            <p>{{ t(`projects.${project.descriptionKey}`) }}</p>
+            <p>{{ project.description || t(`projects.${project.descriptionKey}`) }}</p>
             
             <ul v-if="project.externalLinks?.length" class="link-list">
               <li v-for="link in project.externalLinks" :key="link.url">

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
-import { useI18n, useLocalePath } from '#imports'
+import { useI18n, useLocalePath, useFetch } from '#imports'
 import { PortableText } from '@portabletext/vue'
 import { ArrowLeftIcon, ArrowRightIcon
   , ListBulletIcon, XMarkIcon } from '@heroicons/vue/20/solid'
@@ -26,12 +26,39 @@ const getLocaleString = (val: any) => {
   return ''
 }
 
+const getRoleLabel = (role: string | {title?: LocalizedValue}) =>
+  getLocaleString(typeof role === 'string' ? role : role.title)
+
+const getRoleKey = (role: string | {_key?: string}, index: number) =>
+  typeof role === 'string' ? `${role}-${index}` : role._key || index
+
 // ==========================================
 // MOCK DO PROJETO (Estrutura idêntica à sua query GROQ)
 // ==========================================
 // No futuro, isso será substituído por:
 // const { data: project } = await useSanityQuery(`*[_type == "project" && slug.current == $slug][0]{...}`, { slug })
-const project = ref({
+type LocalizedValue = { pt?: string; en?: string }
+type ProjectData = {
+  title: LocalizedValue
+  description: LocalizedValue
+  year?: number | string
+  duration?: LocalizedValue
+  role?: Array<string | { _key?: string; title?: LocalizedValue }>
+  tags?: Array<{ _id?: string; _key?: string; title: LocalizedValue }>
+  toolsAndskills?: Array<{ _id?: string; _key?: string; title: LocalizedValue }>
+  externalLinks?: Array<{ label: LocalizedValue; url: string }>
+  isComingSoon?: boolean
+  isPasswordProtected?: boolean
+  thumbnailImage?: {
+    horizontal?: { asset?: { url?: string } }
+    vertical?: { asset?: { url?: string } }
+    alt?: LocalizedValue
+  }
+  content?: Record<string, any[] | undefined>
+  gallery?: any[]
+}
+
+const project = ref<ProjectData>({
   title: { pt: 'VagaBuilder', en: 'VagaBuilder' },
   description: { pt: 'Gerenciador de personagens responsivo com wizard passo-a-passo.', en: 'Responsive character manager...' },
   year: '2023',
@@ -58,6 +85,39 @@ const project = ref({
   },
   gallery: []
 })
+
+type ProjectResponse = { project?: ProjectData; requiresPassword?: boolean }
+const { data: projectResponse } = await useFetch<ProjectResponse>(`/api/projects/${encodeURIComponent(slug)}`)
+
+if (projectResponse.value?.project) {
+  project.value = projectResponse.value.project
+}
+
+const isPasswordProtected = computed(() => projectResponse.value?.requiresPassword === true)
+const isUnlocked = ref(!isPasswordProtected.value)
+const accessPassword = ref('')
+const accessError = ref('')
+const isSubmittingPassword = ref(false)
+
+const unlockProject = async () => {
+  accessError.value = ''
+  isSubmittingPassword.value = true
+
+  try {
+    const response = await $fetch<{project: ProjectData}>(`/api/projects/${encodeURIComponent(slug)}/access`, {
+      method: 'POST',
+      body: {password: accessPassword.value},
+    })
+
+    project.value = response.project
+    isUnlocked.value = true
+    accessPassword.value = ''
+  } catch (error: any) {
+    accessError.value = error?.data?.statusMessage || t('project.passwordError')
+  } finally {
+    isSubmittingPassword.value = false
+  }
+}
 
 // Mock para o fallback de "Em breve" e "Próximo Projeto"
 const nextProjectSlug = ref('caixotim')
@@ -87,13 +147,65 @@ const portableTextComponents = {
         h('img', { src, alt, width: 600, height: 300, class: 'gallery-image', loading: 'lazy' }),
         caption ? h('figcaption', caption) : null
       ])
+    },
+    contentImage: (props: any) => {
+      const src = props.value.asset?.url
+      if (!src) return null
+      const alt = getLocaleString(props.value.alt)
+      const caption = getLocaleString(props.value.caption)
+      return h('figure', [
+        h('img', { src, alt, width: 600, height: 300, class: 'gallery-image', loading: 'lazy' }),
+        caption ? h('figcaption', caption) : null
+      ])
+    },
+    embeddedMedia: (props: any) => {
+      const src = props.value.url
+      if (!src) return null
+      const caption = getLocaleString(props.value.caption)
+      return h('figure', { class: 'embedded-media' }, [
+        h('iframe', {
+          src,
+          title: caption || getLocaleString(project.value.title),
+          loading: 'lazy',
+          allow: 'fullscreen; picture-in-picture',
+          referrerpolicy: 'strict-origin-when-cross-origin',
+        }),
+        caption ? h('figcaption', caption) : null,
+      ])
     }
   }
 }
 </script>
 
 <template>
-  <main class="project-page">
+  <main v-if="!isUnlocked" class="project-access-page">
+    <section class="project-access-panel" aria-labelledby="project-access-title">
+      <NuxtLink :to="localePath('/projetos')" class="btn ghost-btn back-link">
+        <ArrowLeftIcon class="icon-md" /> {{ t('project.back') }}
+      </NuxtLink>
+      <h1 id="project-access-title">{{ t('project.passwordTitle') }}</h1>
+      <p>{{ t('project.passwordDescription') }}</p>
+      <form class="project-access-form" @submit.prevent="unlockProject">
+        <label for="project-password">{{ t('project.passwordLabel') }}</label>
+        <input
+          id="project-password"
+          v-model="accessPassword"
+          type="password"
+          autocomplete="current-password"
+          required
+        />
+        <p v-if="accessError" class="project-access-error" role="alert">{{ accessError }}</p>
+        <button class="btn primary-btn" type="submit" :disabled="isSubmittingPassword">
+          {{ isSubmittingPassword ? t('project.passwordChecking') : t('project.passwordSubmit') }}
+        </button>
+      </form>
+      <NuxtLink :to="localePath('/contato')" class="external-link">
+        {{ t('project.requestPassword') }}
+      </NuxtLink>
+    </section>
+  </main>
+
+  <main v-else class="project-page">
 
     <!-- ESTADO: EM BREVE -->
     <section v-if="project.isComingSoon" class="coming-soon-project-page">
@@ -199,7 +311,9 @@ const portableTextComponents = {
             <div class="meta-group">
               <h2>{{ t('project.role') }}</h2>
               <ul class="metadata-list">
-                <li v-for="role in project.role" :key="role" class="tag">{{ role }}</li>
+                <li v-for="(role, index) in project.role" :key="getRoleKey(role, index)" class="tag">
+                  {{ getRoleLabel(role) }}
+                </li>
               </ul>
             </div>
           </MotionSlideUp>
@@ -251,3 +365,65 @@ const portableTextComponents = {
     </template>
   </main>
 </template>
+
+<style scoped>
+.project-access-page {
+  min-height: 70vh;
+  display: grid;
+  place-items: center;
+  padding: 3rem 1.5rem;
+}
+
+.project-access-panel {
+  width: min(100%, 34rem);
+  display: grid;
+  gap: 1rem;
+}
+
+.project-access-panel h1 {
+  margin: 2rem 0 0;
+}
+
+.project-access-form {
+  display: grid;
+  gap: 0.75rem;
+  margin: 1rem 0 0.5rem;
+}
+
+.project-access-form input {
+  min-height: 2.75rem;
+  padding: 0.65rem 0.75rem;
+}
+
+.project-access-error {
+  color: #a32828;
+  margin: 0;
+}
+
+.project-access-form button {
+  justify-self: start;
+  margin-top: 0.5rem;
+}
+
+.embedded-media {
+  margin: 2rem 0;
+}
+
+.embedded-media iframe {
+  display: block;
+  width: 100%;
+  min-height: 30rem;
+  border: 0;
+}
+
+@media (max-width: 767px) {
+  .project-access-page {
+    min-height: 75vh;
+    padding-inline: 1rem;
+  }
+
+  .embedded-media iframe {
+    min-height: 20rem;
+  }
+}
+</style>

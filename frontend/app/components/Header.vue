@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n, useLocalePath } from '#imports'
 import { useColorMode } from '@vueuse/core'
@@ -9,6 +9,7 @@ const route = useRoute()
 const { t } = useI18n()
 const localePath = useLocalePath()
 const colorMode = useColorMode() 
+const isMounted = ref(false)
 
 const isAvailableForWork = ref(true)
 
@@ -28,6 +29,10 @@ watch(() => route.path, () => {
 const toggleTheme = () => {
   colorMode.value = colorMode.value === 'dark' ? 'light' : 'dark'
 }
+
+onMounted(() => {
+  isMounted.value = true
+})
 </script>
 
 <template>
@@ -75,7 +80,7 @@ const toggleTheme = () => {
           :aria-label="t('header.toggleTheme')"
           @click="toggleTheme" 
         >
-          <MoonIcon v-if="colorMode === 'light'" class="icon-md" />
+          <MoonIcon v-if="!isMounted || colorMode === 'light'" class="icon-md" />
           <SunIcon v-else class="icon-md" />
         </button>
 

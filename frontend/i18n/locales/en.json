@@ -93,6 +93,8 @@
       "ufcQuixada": "UFC Quixadá",
       "description": "Investigation of reference management practices using the Semiotic Inspection Method (SIM) and MAC."
     },
+    "viewPublication": "View publication",
+    "clientsTitle": "Clients",
     "ctaTitle": "Looking for design that speaks to code?",
     "ctaDescription": "I am always open to discussing new projects, creative ideas, or collaboration opportunities. Feel free to send me a message!",
     "ctaContact": "Get in touch"
@@ -127,7 +129,18 @@
     "ctaTitle": "Like this project?",
     "ctaDescription": "I am always open to discussing new projects, creative ideas, or collaboration opportunities. Feel free to send me a message!",
     "sendMessage": "Send message",
-    "nextProject": "Next project →"
+    "nextProject": "Next project →",
+    "passwordTitle": "Protected project",
+    "passwordDescription": "This project is private. Enter the password to continue.",
+    "passwordLabel": "Access password",
+    "passwordChecking": "Checking...",
+    "passwordSubmit": "Access project",
+    "passwordError": "The password could not be validated.",
+    "requestPassword": "Request access"
+  },
+  "changelog": {
+    "title": "Changelog",
+    "empty": "No updates have been published yet."
   },
   "home": {
     "fallbackTitle": "Welcome to my portfolio",

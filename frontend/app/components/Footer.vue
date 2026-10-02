@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, computed } from 'vue'
-import { useI18n } from '#imports'
+import { useFetch, useI18n, useLocalePath } from '#imports'
 import { ArrowUpIcon } from '@heroicons/vue/16/solid'
 
 defineProps<{
@@ -8,6 +8,10 @@ defineProps<{
 }>()
 
 const { t, locale, locales, setLocale } = useI18n()
+const localePath = useLocalePath()
+
+type SiteSettings = { version?: string; lastUpdated?: string }
+const { data: siteSettings } = await useFetch<SiteSettings>('/api/site-settings')
 
 const currentTime = ref('')
 const isNight = ref(false)
@@ -16,6 +20,14 @@ let timer: ReturnType<typeof setInterval>
 const currentDate = computed(() => new Date().toLocaleDateString(
   locale.value === 'pt' ? 'pt-BR' : 'en-US'
 ))
+
+const displayedVersion = computed(() => siteSettings.value?.version || '6.0.0')
+const displayedLastUpdated = computed(() => {
+  if (!siteSettings.value?.lastUpdated) return currentDate.value
+  return new Intl.DateTimeFormat(locale.value === 'pt' ? 'pt-BR' : 'en-US').format(
+    new Date(`${siteSettings.value.lastUpdated}T00:00:00`),
+  )
+})
 
 const updateTime = () => {
   const now = new Date()
@@ -147,7 +159,8 @@ const reduceMotion = ref(false)
         {{ t('footer.fontsPrefix') }} <a href="#">Zalando Sans</a> (&copy; 2025 The Zalando Sans Project Authors) {{ t('footer.and') }} <a href="#">NKDuy</a> (&copy; 2022 NKDuy).
       </p>
       <p style="margin-top: 2rem;">
-        {{ t('footer.version') }} | {{ t('footer.lastUpdated', { date: currentDate }) }} | <a href="#">{{ t('footer.changelog') }}</a> :)
+        {{ displayedVersion }} | {{ t('footer.lastUpdated', { date: displayedLastUpdated }) }} |
+        <NuxtLink :to="localePath('/changelog')">{{ t('footer.changelog') }}</NuxtLink> :)
       </p>
     </MotionSlideUp>
   </footer>
