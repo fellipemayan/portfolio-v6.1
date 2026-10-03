@@ -6,26 +6,6 @@ import { PortableText } from '@portabletext/vue'
 const { locale, t } = useI18n()
 const localePath = useLocalePath()
 
-// Dados estáticos locais (fallback) para estruturar a interface
-const fallbackProjects = [
-  {
-    slug: 'misplica',
-    title: 'MISplica',
-     categoryKey: 'misplica.category',
-     descriptionKey: 'misplica.description',
-    thumbnailImage: { horizontal: { asset: { url: '/images/projects/misplica.jpg' } } },
-    tags: ['Vue.js', 'Nuxt', 'UI/UX']
-  },
-  {
-    slug: 'vagabuilder',
-    title: 'VagaBuilder',
-     categoryKey: 'vagabuilder.category',
-     descriptionKey: 'vagabuilder.description',
-    thumbnailImage: { horizontal: { asset: { url: '/images/projects/vagabuilder.jpg' } } },
-    tags: ['JavaScript', 'Vue', 'Design System']
-  }
-]
-
 type HomePageData = {
   hero?: {pt?: any[]; en?: any[]}
   resume?: {pt?: string; en?: string}
@@ -54,7 +34,7 @@ const getLocalized = (value: any) => {
 }
 
 const featuredProjects = computed(() => {
-  const source = sanityProjects.value?.length ? sanityProjects.value : fallbackProjects
+  const source = sanityProjects.value || []
 
   return source.map((project) => ({
     ...project,
@@ -116,7 +96,7 @@ const heroPortableTextComponents = {
     </MotionSlideUp>
 
     <!-- Seção de Projetos em Destaque com Animação em Cascata -->
-    <MotionSlideUp :delay="150">
+    <MotionSlideUp v-if="featuredProjects.length" :delay="150">
       <section class="featured-projects-section">
         <div class="section-header">
           <h2>{{ t('home.featuredProjects') }}</h2>

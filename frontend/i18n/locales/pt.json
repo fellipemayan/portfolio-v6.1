@@ -104,6 +104,7 @@
     "description": "Um compilado de estudos de caso, experimentos e ferramentas.",
     "gridView": "Visualização em grade",
     "listView": "Visualização em lista",
+    "allCategories": "Todos",
     "viewProjectAria": "Ver projeto: {title}",
     "viewProject": "Ver projeto",
     "comingSoon": "Em breve...",
@@ -187,7 +188,7 @@
     "sourcePrefix": "O código-fonte está disponível no",
     "fontsPrefix": "Os tipos utilizados nesse projeto foram",
     "and": "e",
-    "version": "6.0.0",
+    "version": "1.1.0",
     "lastUpdated": "Última atualização em {date}",
     "changelog": "Changelog"
   }

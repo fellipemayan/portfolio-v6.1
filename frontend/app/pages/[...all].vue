@@ -1,23 +1,9 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
 import { useI18n, useLocalePath } from '#imports'
 
 const { t } = useI18n()
 const localePath = useLocalePath()
 
-const projects = [
-  { title: 'VagaBuilder', slug: 'vagabuilder' },
-  { title: 'MoLIC.dg', slug: 'molic' },
-  { title: 'Caixotim', slug: 'caixotim' },
-  { title: 'MISplica', slug: 'misplica' } 
-]
-
-const randomProject = ref(projects[0]!)
-
-onMounted(() => {
-  const randomIndex = Math.floor(Math.random() * projects.length)
-  // randomProject.value = projects[randomIndex]
-})
 </script>
 
 <template>
@@ -52,20 +38,6 @@ onMounted(() => {
         </div>
       </MotionSlideUp>
       
-      <MotionSlideUp :delay="0.4" style="margin-top: 4rem;">
-        <h2 class="or-text">{{ t('notFound.randomProjectIntro') }}</h2>
-        <ul class="single-project-list" style="list-style: none; padding: 0;">
-          <li>
-            <NuxtLink
-              :to="localePath(`/projetos/${randomProject.slug}`)"
-              class="btn four-o-four-link"
-            >
-              {{ t('notFound.randomProject', { title: randomProject.title }) }}
-            </NuxtLink>
-          </li>
-        </ul>
-      </MotionSlideUp>
-
     </section>
   </main>
 </template>

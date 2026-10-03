@@ -104,6 +104,7 @@
     "description": "A collection of case studies, experiments, and tools.",
     "gridView": "Grid view",
     "listView": "List view",
+    "allCategories": "All",
     "viewProjectAria": "View project: {title}",
     "viewProject": "View project",
     "comingSoon": "Coming soon...",

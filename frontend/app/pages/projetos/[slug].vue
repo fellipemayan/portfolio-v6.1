@@ -32,11 +32,6 @@ const getRoleLabel = (role: string | {title?: LocalizedValue}) =>
 const getRoleKey = (role: string | {_key?: string}, index: number) =>
   typeof role === 'string' ? `${role}-${index}` : role._key || index
 
-// ==========================================
-// MOCK DO PROJETO (Estrutura idêntica à sua query GROQ)
-// ==========================================
-// No futuro, isso será substituído por:
-// const { data: project } = await useSanityQuery(`*[_type == "project" && slug.current == $slug][0]{...}`, { slug })
 type LocalizedValue = { pt?: string; en?: string }
 type ProjectData = {
   title: LocalizedValue
@@ -59,32 +54,13 @@ type ProjectData = {
 }
 
 const project = ref<ProjectData>({
-  title: { pt: 'VagaBuilder', en: 'VagaBuilder' },
-  description: { pt: 'Gerenciador de personagens responsivo com wizard passo-a-passo.', en: 'Responsive character manager...' },
-  year: '2023',
-  duration: { pt: '3 meses', en: '3 months' },
-  role: ['Front-end', 'UI/UX'],
-  tags: [{ _id: '1', title: { pt: 'Desenvolvimento', en: 'Development' } }],
-  toolsAndskills: [{ _id: '1', title: { pt: 'Vue.js' } }, { _id: '2', title: { pt: 'Figma' } }],
-  externalLinks: [{ label: { pt: 'Ver código', en: 'View code' }, url: 'https://github.com/fellipemayan' }],
-  isComingSoon: false,
-  thumbnailImage: {
-    horizontal: { asset: { url: 'https://placehold.co/1200x675/333/FFF?text=Hero+Image' } },
-    vertical: undefined as { asset?: { url?: string } } | undefined,
-    alt: { pt: 'Interface Principal', en: 'Main Interface' }
-  },
-  content: {
-    pt: [
-      { _type: 'block', _key: 'b1', style: 'h2', children: [{ _type: 'span', text: 'O Desafio' }] },
-      { _type: 'block', _key: 'b2', style: 'normal', children: [{ _type: 'span', text: 'Criar um sistema acessível para jogadores de RPG.' }] }
-    ],
-    en: [
-      { _type: 'block', _key: 'b1', style: 'h2', children: [{ _type: 'span', text: 'The Challenge' }] },
-      { _type: 'block', _key: 'b2', style: 'normal', children: [{ _type: 'span', text: 'Create an accessible system for RPG players.' }] }
-    ]
-  },
-  gallery: []
+  title: {},
+  description: {},
 })
+
+useHead(() => ({
+  title: `${getLocaleString(project.value.title)} | Fellipe Mayan ✸ Portfólio`,
+}))
 
 type ProjectResponse = { project?: ProjectData; requiresPassword?: boolean }
 const { data: projectResponse } = await useFetch<ProjectResponse>(`/api/projects/${encodeURIComponent(slug)}`)
@@ -118,10 +94,6 @@ const unlockProject = async () => {
     isSubmittingPassword.value = false
   }
 }
-
-// Mock para o fallback de "Em breve" e "Próximo Projeto"
-const nextProjectSlug = ref('caixotim')
-const randomProject = ref({ title: 'MoLIC.dg', slug: 'molic', thumbnailImage: { asset: { url: 'https://placehold.co/400x225/111/FFF?text=Random' } } })
 
 const localizedContent = computed(() => project.value.content?.[locale.value] || project.value.content?.pt || [])
 
@@ -214,17 +186,6 @@ const portableTextComponents = {
         <p>{{ t('project.comingSoonDescription') }}</p>
       </MotionSlideUp>
       
-      <MotionSlideUp v-if="randomProject" :delay="0.1" >
-        <h2>{{ t('project.seeAnother') }}</h2>
-        <div class="random-project-suggestion">
-          <NuxtLink :to="localePath(`/projetos/${randomProject.slug}`)" class="random-project-link">
-            <div class="random-project-thumb">
-              <img :src="randomProject.thumbnailImage.asset.url" :alt="t('project.suggestedProject')" style="width: 400px; height: 225px; object-fit: cover;"/>
-            </div>
-            <span>{{ randomProject.title }}</span>
-          </NuxtLink>
-        </div>
-      </MotionSlideUp>
     </section>
 
     <!-- ESTADO: PROJETO DISPONÍVEL -->
@@ -359,7 +320,7 @@ const portableTextComponents = {
         :title="t('project.ctaTitle')"
         :description="t('project.ctaDescription')"
         :primary-action="{ label: t('project.sendMessage'), path: '/contato' }"
-        :secondary-action="{ label: t('project.nextProject'), path: `/projetos/${nextProjectSlug}` }"
+        :secondary-action="{ label: t('projects.viewAll'), path: '/projetos' }"
       />
 
     </template>
