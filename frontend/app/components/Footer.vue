@@ -1,33 +1,47 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, computed } from 'vue'
 import { useFetch, useI18n, useLocalePath } from '#imports'
-import { ArrowUpIcon } from '@heroicons/vue/16/solid'
 
-defineProps<{
-  socialLinks?: Array<{ name: string; url: string }>
+type LocalizedString = { pt?: string; en?: string }
+type SocialLink = {
+  _key?: string
+  name?: LocalizedString
+  url: string
+  order?: number
+  isVisible?: boolean
+}
+
+const props = defineProps<{
+  socialLinks?: SocialLink[]
 }>()
 
 const { t, locale, locales, setLocale } = useI18n()
 const localePath = useLocalePath()
 
-type SiteSettings = { version?: string; lastUpdated?: string }
+const localizedSocialLinks = computed(() =>
+  (siteSettings.value?.socialLinks || [])
+    .filter((link) => link.isVisible !== false)
+    .sort((first, second) => (first.order ?? 0) - (second.order ?? 0))
+    .map((link) => ({
+      key: link._key || link.url,
+      name: typeof link.name === 'string' 
+              ? link.name 
+              : (link.name?.[locale.value as 'pt' | 'en'] || link.name?.pt || link.name?.en || link.url),
+      url: link.url,
+    })),
+)
+type SiteSettings = { 
+  version?: string; 
+  lastUpdated?: string;
+  socialLinks?: SocialLink[];
+}
 const { data: siteSettings } = await useFetch<SiteSettings>('/api/site-settings')
 
+
+  
 const currentTime = ref('')
 const isNight = ref(false)
 let timer: ReturnType<typeof setInterval>
-
-const currentDate = computed(() => new Date().toLocaleDateString(
-  locale.value === 'pt' ? 'pt-BR' : 'en-US'
-))
-
-const displayedVersion = computed(() => siteSettings.value?.version || '6.0.0')
-const displayedLastUpdated = computed(() => {
-  if (!siteSettings.value?.lastUpdated) return currentDate.value
-  return new Intl.DateTimeFormat(locale.value === 'pt' ? 'pt-BR' : 'en-US').format(
-    new Date(`${siteSettings.value.lastUpdated}T00:00:00`),
-  )
-})
 
 const updateTime = () => {
   const now = new Date()
@@ -70,109 +84,49 @@ const weatherIcon = computed(() => {
   return isNight.value ? 'moon' : 'sun'
 })
 
-const scrollToTop = () => {
-  window.scrollTo({ top: 0, behavior: 'smooth' })
-}
-
-const changeLocale = (event: Event) => {
-  const nextLocale = (event.target as HTMLSelectElement).value
-  if (nextLocale === 'pt' || nextLocale === 'en') {
-    setLocale(nextLocale)
-  }
-}
-
-const reduceMotion = ref(false)
 </script>
 
 <template>
-  <footer class="full-width footer">
-    <div class="footer-grid">
-      <MotionSlideUp class="left">
-        <button class="btn primary-btn" @click="scrollToTop">
-          <ArrowUpIcon class="icon-md" /> {{ t('footer.backToTop') }}
-        </button>
-      </MotionSlideUp>
+  <footer class="content-grid">
+    <p class="half-left">
+      &copy; {{ new Date().getFullYear() }} Fellipe Mayan. {{ t('footer.copyright') }} 
+    </p>
 
-      <MotionSlideUp :delay="0.1" class="middle-left">
-        <ul>
-          <li v-for="link in socialLinks" :key="link.name">
-            <a 
-              :href="link.url" 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              class="external-link"
-            >
-              {{ link.name }}
-            </a>
-          </li>
-        </ul>
-      </MotionSlideUp>
+    <ul class="social-links right">
+        <li v-for="link in localizedSocialLinks" :key="link.key">
+        <a 
+          :href="link.url" 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          class="external-link"
+        >
+          {{ link.name }}
+        </a>
+      </li>
+    </ul>
 
-      <MotionSlideUp :delay="0.2" class="middle-right">
-        <p class="footer-location">{{ t('footer.location') }}</p>
-        <p>{{ t('footer.currentTime', { time: currentTime }) }}</p>
-        <p v-if="currentWeather.data">
-          {{ t('footer.weatherPrefix') }}
-          <span
-            id="weather-description"
-            :data-cursor-icon="weatherIcon"
-            data-cursor-icon-pos="only"
-          >
-            {{ weatherDescription }}
-          </span>{{ t('footer.weatherSuffix', { temp: currentWeather.data.temp }) }}
-        </p>
-      </MotionSlideUp>
 
-      <MotionSlideUp :delay="0.3" class="copy-right">
-        <p>&copy; {{ new Date().getFullYear() }} Fellipe Mayan.</p>
-        <p>{{ t('footer.copyright') }}</p>
-        
-        <div class="footer-settings" style="margin-top: 1rem; display: flex; gap: 1rem; flex-direction: column;">
-          <label>
-            {{ t('footer.language') }}:
-            <select :value="locale" @change="changeLocale" class="footer-select">
-              <option v-for="l in locales" :key="l.code" :value="l.code">
-                {{ l.name }}
-              </option>
-            </select>
-          </label>
-          
-          <label>
-            {{ t('footer.animations') }}:
-            <select v-model="reduceMotion" class="footer-select">
-              <option :value="false">{{ t('footer.animationDefault') }}</option>
-              <option :value="true">{{ t('footer.animationReduced') }}</option>
-            </select>
-          </label>
-        </div>
-      </MotionSlideUp>
-    </div>
-
-    <MotionSlideUp :delay="0.4" class="colophon" style="margin-top: 4rem; text-transform: uppercase; font-size: 0.8rem; text-align: center;">
-      <p>
-        {{ t('footer.createdWith') }} <a href="https://nuxt.com" target="_blank">Nuxt.js</a> {{ t('footer.createdWithSuffix') }}
-      </p>
-      <p>
-        {{ t('footer.iconsPrefix') }} <a href="https://heroicons.com" target="_blank">Heroicons</a>. {{ t('footer.motionPrefix') }} <a href="https://motion.dev" target="_blank">Motion.dev</a>. {{ t('footer.sourcePrefix') }} <a href="#" target="_blank">GitHub</a>.
-      </p>
-      <p>
-        {{ t('footer.fontsPrefix') }} <a href="#">Zalando Sans</a> (&copy; 2025 The Zalando Sans Project Authors) {{ t('footer.and') }} <a href="#">NKDuy</a> (&copy; 2022 NKDuy).
-      </p>
-      <p style="margin-top: 2rem;">
-        {{ displayedVersion }} | {{ t('footer.lastUpdated', { date: displayedLastUpdated }) }} |
-        <NuxtLink :to="localePath('/changelog')">{{ t('footer.changelog') }}</NuxtLink> :)
-      </p>
-    </MotionSlideUp>
   </footer>
 </template>
 
 <style scoped>
-.footer-select {
-  background: transparent;
-  border: 1px solid currentColor;
-  padding: 0.2rem 0.5rem;
-  border-radius: 4px;
-  font-family: inherit;
-  color: inherit;
+footer {
+  background-color: var(--color-bg-base);
+  border-top: 1px solid var(--color-border);
+  padding-block: var(--spacing-lg);
 }
+
+.social-links {
+  display: flex;
+  gap: var(--spacing-md);
+  justify-content: flex-end;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  a:hover {
+    text-decoration: wavy underline;
+  }
+}
+
 </style>

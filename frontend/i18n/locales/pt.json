@@ -147,12 +147,15 @@
     "fallbackTitle": "Bem-vindo ao meu portfólio",
      "heroSubtitle": "Product Designer & Developer focado em interfaces digitais, sistemas e experiências interativas.",
      "skills": {
+      "productDesign": "Design de Produto",
+      "uxResearch": "Pesquisa em UX",
        "informationArchitecture": "Arquitetura da Informação",
        "uxUi": "UX/UI",
        "graphicEditorial": "Gráfico & Editorial",
        "frontend": "Front-end"
      },
      "resume": "Currículo",
+     "enterInContact": "Entrar em contato",
     "viewProjects": "Ver projetos",
     "featuredProjects": "Projetos em destaque",
      "viewAll": "Ver todos",
@@ -167,7 +170,7 @@
        }
      },
      "ctaTitle": "Vamos criar algo juntos?",
-     "ctaDescription": "Estou disponível para conversar sobre novos projetos e colaborações.",
+     "ctaDescription": "Estou sempre aberto a discutir novos projetos, ideias criativas ou oportunidades de colaboração. Sinta-se à vontade para me enviar uma mensagem!",
      "ctaContact": "Entre em contato"
   },
   "footer": {
@@ -181,6 +184,7 @@
     "animations": "Animações",
     "animationDefault": "Padrão",
     "animationReduced": "Reduzidas",
+    "animationBrowserPreference": "Redução definida pelo navegador",
     "createdWith": "Este portfólio foi criado usando",
     "createdWithSuffix": "com Vue e CSS.",
     "iconsPrefix": "Os ícones usados são da biblioteca",

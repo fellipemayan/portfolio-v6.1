@@ -1,8 +1,18 @@
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
-import { useI18n } from '#imports'
+import { ref, reactive, computed } from 'vue'
+import { useFetch, useI18n } from '#imports'
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
+type LocalizedString = { pt?: string; en?: string }
+type SocialLink = {
+  _key?: string
+  name?: LocalizedString
+  url: string
+  order?: number
+  isVisible?: boolean
+}
+
+const { data: siteSettings } = await useFetch<{ socialLinks?: SocialLink[] }>('/api/site-settings')
 const formspreeId = 'SEU_ID_AQUI'
 const status = ref<'idle' | 'loading' | 'success' | 'error'>('idle')
 const shake = ref(false)
@@ -22,11 +32,16 @@ const servicesOptions = ['uiUx', 'frontend', 'graphicDesign', 'consulting']
 const budgetOptions = ['under3000', 'from3000To8000', 'from8000To15000', 'over15000']
 const timelineOptions = ['asSoonAsPossible', 'oneToTwoMonths', 'threeToSixMonths', 'noRush']
 
-const socialLinks = ref([
-  { name: 'LinkedIn', url: 'https://linkedin.com/in/fellipemayan', isVisible: true },
-  { name: 'Behance', url: 'https://behance.net/fellipemayan', isVisible: true },
-  { name: 'GitHub', url: 'https://github.com/fellipemayan', isVisible: true }
-])
+const socialLinks = computed(() =>
+  (siteSettings.value?.socialLinks || [])
+    .filter((link) => link.isVisible !== false)
+    .sort((first, second) => (first.order ?? 0) - (second.order ?? 0))
+    .map((link) => ({
+      key: link._key || link.url,
+      name: link.name?.[locale.value] || link.name?.pt || link.name?.en || link.url,
+      url: link.url,
+    })),
+)
 
 const copyEmailToClipboard = async () => {
   await navigator.clipboard.writeText('fmayan999@gmail.com')

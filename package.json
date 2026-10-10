@@ -1,5 +1,3 @@
 {
-  "dependencies": {
-    "@nuxtjs/sanity": "^2.5.0"
-  }
+  "dependencies": {}
 }

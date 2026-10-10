@@ -1,4 +1,4 @@
-const siteSettingsQuery = '*[_type == "siteSettings"][0]{version, lastUpdated}'
+const siteSettingsQuery = '*[_type == "siteSettings"][0]{version, lastUpdated, socialLinks[]{_key, name, url, order, isVisible}}'
 
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig(event)

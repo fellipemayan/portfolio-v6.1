@@ -140,12 +140,6 @@ export default defineType({
       options: {dateFormat: 'DD/MM/YYYY'},
     }),
     defineField({
-      name: 'isFeatured',
-      title: 'Exibir na Home',
-      type: 'boolean',
-      initialValue: false,
-    }),
-    defineField({
       name: 'featuredOrder',
       title: 'Ordem do destaque',
       type: 'number',

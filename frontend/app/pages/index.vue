@@ -9,10 +9,11 @@ const localePath = useLocalePath()
 type HomePageData = {
   hero?: {pt?: any[]; en?: any[]}
   resume?: {pt?: string; en?: string}
+  roles?: string[]
 }
 
 type HomeResponse = {
-  homePage?: {hero?: {pt?: any[]; en?: any[]}; resumePt?: string; resumeEn?: string}
+  homePage?: {hero?: {pt?: any[]; en?: any[]}; resumePt?: string; resumeEn?: string; roles?: string[]}
   projects?: any[]
 }
 
@@ -23,6 +24,7 @@ const homePage = computed(() => {
   if (!page) return null
   return {
     hero: page.hero,
+    roles: page.roles, 
     resume: {pt: page.resumePt, en: page.resumeEn},
   } as HomePageData
 })
@@ -38,19 +40,45 @@ const featuredProjects = computed(() => {
 
   return source.map((project) => ({
     ...project,
+    // Extrai o slug do formato do Sanity
     slug: typeof project.slug === 'string' ? project.slug : project.slug?.current,
+    
+    // Textos localizados
     title: getLocalized(project.title),
     category: getLocalized(project.category),
     description: getLocalized(project.description),
     tags: project.tags?.map((tag: any) => getLocalized(tag.title || tag)) || [],
-    thumbnailImage: project.thumbnailHorizontalUrl ? {
-      horizontal: {asset: {url: project.thumbnailHorizontalUrl}},
-      alt: getLocalized(project.thumbnailAlt),
-    } : project.thumbnailImage,
+    
+    // Mantém o suporte antigo (thumbnailHorizontalUrl) mas privilegia o formato novo de thumbnailImage do Sanity
+    thumbnailImage: {
+      horizontal: {
+        asset: { 
+          url: project.thumbnailImage?.horizontal?.asset?.url || project.thumbnailHorizontalUrl || '',
+          metadata: project.thumbnailImage?.horizontal?.asset?.metadata 
+        }
+      },
+      vertical: {
+        asset: { 
+          url: project.thumbnailImage?.vertical?.asset?.url || project.thumbnailVerticalUrl || '',
+          metadata: project.thumbnailImage?.vertical?.asset?.metadata 
+        }
+      },
+      alt: getLocalized(project.thumbnailImage?.alt || project.thumbnailAlt)
+    },
+    
+    // Garante que o array de links externos passe para o card poder exibir o ícone
+    externalLinks: project.externalLinks || []
   }))
 })
 
 const localizedHeroContent = computed(() => homePage.value?.hero?.[locale.value as 'pt' | 'en'] || homePage.value?.hero?.pt || [])
+
+const localizedRoles = computed(() => {
+  const rawRoles = homePage.value?.roles || []
+  return rawRoles.map((role: any) => getLocalized(role))
+})
+
+
 const resumeUrl = computed(() => homePage.value?.resume?.[locale.value as 'pt' | 'en'] || homePage.value?.resume?.pt || '/files/cv-fellipe-mayan.pdf')
 
 const heroPortableTextComponents = {
@@ -64,99 +92,118 @@ const heroPortableTextComponents = {
     spanId: (props: any, {slots}: any) => h('span', {id: props.value.id}, slots.default?.()),
   },
 }
+
+const { isReducedMotion } = useAnimationPreferences()
+
+const slideUp = (delay = 0) => {
+  if (isReducedMotion.value) return undefined
+  
+  return {
+    initial: { y: 40, opacity: 0 },
+    visibleOnce: { 
+      y: 0, 
+      opacity: 1, 
+      transition: { 
+        duration: 400, 
+        delay, 
+        ease: [0.33, 1, 0.68, 1] 
+      } 
+    }
+  }
+}
 </script>
 
 <template>
-  <div class="home-page">
     <!-- Seção Hero com Animação -->
-    <MotionSlideUp :delay="0">
-      <section class="hero-section">
-        <template v-if="localizedHeroContent.length">
-          <PortableText :value="localizedHeroContent" :components="heroPortableTextComponents" />
-        </template>
-        <template v-else>
-          <h1 class="hero-title">{{ t('home.fallbackTitle') }}</h1>
-          <p class="hero-subtitle">{{ t('home.heroSubtitle') }}</p>
-        </template>
-        <ul >
-           <li>{{ t('home.skills.informationArchitecture') }}</li>
-           <li>{{ t('home.skills.uxUi') }}</li>
-           <li>{{ t('home.skills.graphicEditorial') }}</li>
-           <li>{{ t('home.skills.frontend') }}</li>
-        </ul>
-        <div class="hero-actions">
-          <NuxtLink :to="localePath('/projetos')" class="btn primary-btn">
-            {{ t('home.viewProjects') }}
-          </NuxtLink>
-          <a :href="resumeUrl" target="_blank" rel="noopener noreferrer" class="btn secondary-btn">
-             {{ t('home.resume') }}
-          </a>
-        </div>
-      </section>
-    </MotionSlideUp>
+    <section class="hero-section" v-motion="slideUp(0)">
+      <template v-if="localizedHeroContent.length">
+        <PortableText :value="localizedHeroContent" :components="heroPortableTextComponents" />
+      </template>
+      <template v-else>
+        <h1 class="hero-title">{{ t('home.fallbackTitle') }}</h1>
+      </template>
+      <ul v-if="localizedRoles.length" class="skills-list">
+      <li v-for="(role, index) in localizedRoles" :key="index">
+        {{ role }}
+      </li>
+    </ul>
+      <div class="actions">
+        <NuxtLink :to="localePath('/contato')" class="btn primary-btn">
+          {{ t('home.enterInContact') }}
+        </NuxtLink>
+        <a :href="resumeUrl" target="_blank" rel="noopener noreferrer" class="btn secondary-btn">
+           {{ t('home.resume') }}
+        </a>
+      </div>
+    </section>
 
     <!-- Seção de Projetos em Destaque com Animação em Cascata -->
-    <MotionSlideUp v-if="featuredProjects.length" :delay="150">
-      <section class="featured-projects-section">
-        <div class="section-header">
-          <h2>{{ t('home.featuredProjects') }}</h2>
-          <NuxtLink :to="localePath('/projetos')" class="view-all-link">
-            {{ t('home.viewAll') }} →
-          </NuxtLink>
-        </div>
+    <section class="featured-section" v-motion="slideUp(150)">
+      <h2>{{ t('home.featuredProjects') }}</h2>
 
-        <div class="projects-grid">
-          <div v-for="project in featuredProjects" :key="project.slug" class="project-card">
-            <div class="project-image-wrapper">
-              <NuxtImg 
-                :src="project.thumbnailImage?.horizontal?.asset?.url || '/images/projects/misplica.jpg'" 
-                :alt="project.title"
-                width="600"
-                height="400"
-                loading="lazy"
-              />
-            </div>
-            <div class="project-info">
-               <span class="project-category">{{ project.category || t(`home.projects.${project.categoryKey}`) }}</span>
-              <h3>
-                <NuxtLink :to="localePath(`/projetos/${project.slug}`)">
-                  {{ project.title }}
-                </NuxtLink>
-              </h3>
-               <p>{{ project.description || t(`home.projects.${project.descriptionKey}`) }}</p>
-              
-              <div class="project-tags">
-                <span v-for="tag in project.tags" :key="tag" class="tag">{{ tag }}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-    </MotionSlideUp>
+      <ul class="projects-grid">
+        <li v-for="project in featuredProjects" :key="project.slug">
+          <ProjectCard :project="project" layout="grid" />
+        </li>
+      </ul>
+    </section>
 
-    <MotionSlideUp :delay="300">
-      <section class="cta-section">
-        <div class="cta-content">
-          <h2 class="cta-title">
-            {{ t('home.ctaTitle') }}
-          </h2>
-          <p class="cta-description">
-            {{ t('home.ctaDescription') }}
-          </p>
-          <div class="cta-actions">
-            <NuxtLink :to="localePath('/contato')" class="btn primary-btn">
-              {{ t('home.ctaContact') }}
-            </NuxtLink>
-            <NuxtLink :to="localePath('/projetos')" class="btn secondary-btn">
-              {{ t('home.viewProjects') }}
-            </NuxtLink>
-          </div>
-        </div>
-      </section>
-    </MotionSlideUp>
-  </div>
+    <!-- <section class="cta-section" v-motion="slideUp(300)">
+      <h2 class="cta-title">
+        {{ t('home.ctaTitle') }}
+      </h2>
+      <p class="cta-description">
+        {{ t('home.ctaDescription') }}
+      </p>
+      <div class="actions">
+        <NuxtLink :to="localePath('/contato')" class="btn primary-btn">
+          {{ t('home.ctaContact') }}
+        </NuxtLink>
+        <NuxtLink :to="localePath('/projetos')" class="btn secondary-btn">
+          {{ t('home.viewProjects') }}
+        </NuxtLink>
+      </div>
+    </section> -->
 </template>
 
 <style scoped>
 
+.skills-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
+  color: var(--color-text-muted);
+  list-style: none;
+  padding: 0;
+
+  & li:not(:first-child)::before {
+    content: '•';
+    margin-right: var(--spacing-sm);
+  }
+}
+
+.actions {
+  display: flex;
+  gap: var(--spacing-md);
+  margin-top: var(--gap-md);
+}
+
+
+.featured-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--gap-md);
+}
+
+.view-all-link {
+  text-decoration: none;
+  /* transform: translateX(var(--spacing-lg)); */
+}
 </style>

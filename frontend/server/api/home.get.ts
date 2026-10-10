@@ -1,4 +1,35 @@
-const homeQuery = '{"homePage": *[_type == "homePage"][0]{hero, "resumePt": resume.pt.asset->url, "resumeEn": resume.en.asset->url}, "projects": *[_type == "project" && isVisible != false && isFeatured == true] | order(featuredOrder asc, _createdAt desc)[0...6]{slug, title, category, description, tags[]{_key, title}, "thumbnailHorizontalUrl": thumbnailImage.horizontal.asset->url, "thumbnailAlt": thumbnailImage.alt}}'
+const homeQuery = `{
+  "homePage": *[_type == "homePage"][0] {
+    hero,
+    roles,
+    "resumePt": resume.pt.asset->url,
+    "resumeEn": resume.en.asset->url
+  },
+  "projects": *[_type == "project"] | order(featuredOrder asc) {
+    _id,
+    title,
+    slug,
+    description,
+    category,
+    tags,
+    externalLinks,
+    thumbnailImage {
+      horizontal { 
+        asset-> {
+          url,
+          metadata { palette }
+        } 
+      },
+      vertical { 
+        asset-> {
+          url,
+          metadata { palette }
+        } 
+      },
+      alt
+    }
+  }
+}`
 
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig(event)

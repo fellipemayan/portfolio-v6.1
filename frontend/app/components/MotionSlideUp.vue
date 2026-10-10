@@ -2,13 +2,15 @@
 defineProps<{
   delay?: number
 }>()
+
+const { isReducedMotion } = useAnimationPreferences()
 </script>
 
 <template>
   <Motion
     as="div"
-    :initial="{ y: 40, opacity: 0 }"
-    :enter="{ 
+    :initial="isReducedMotion ? undefined : { y: 40, opacity: 0 }"
+    :enter="isReducedMotion ? undefined : { 
       y: 0, 
       opacity: 1, 
       transition: { 

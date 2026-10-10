@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, h } from 'vue'
-import { useI18n, useLocalePath, useSanityQuery } from '#imports'
+import { useFetch, useI18n, useLocalePath } from '#imports'
 import { PortableText } from '@portabletext/vue'
 import { ArrowLeftIcon } from '@heroicons/vue/20/solid'
 
@@ -12,9 +12,7 @@ type ChangelogPage = {
   content?: Record<string, any[] | undefined>
 }
 
-const changelogQuery = `*[_type == "changelogPage"][0]{title, content}`
-const { data: sanityChangelog } = await useSanityQuery(changelogQuery)
-const changelog = computed(() => sanityChangelog.value as ChangelogPage | null)
+const { data: changelog } = await useFetch<ChangelogPage>('/api/changelog')
 
 const getLocalized = (value: ChangelogPage['title']) => {
   if (!value) return ''

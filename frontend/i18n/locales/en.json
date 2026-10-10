@@ -147,12 +147,15 @@
     "fallbackTitle": "Welcome to my portfolio",
      "heroSubtitle": "Product Designer & Developer focused on digital interfaces, systems, and interactive experiences.",
      "skills": {
+        "productDesign": "Product Design",
+        "uxResearch": "UX Research",
        "informationArchitecture": "Information Architecture",
        "uxUi": "UX/UI",
        "graphicEditorial": "Graphic & Editorial",
        "frontend": "Front-end"
      },
      "resume": "Resume",
+     "enterInContact": "Get in touch",
     "viewProjects": "View projects",
     "featuredProjects": "Featured projects",
      "viewAll": "View all",
@@ -181,6 +184,7 @@
     "animations": "Animations",
     "animationDefault": "Default",
     "animationReduced": "Reduced",
+    "animationBrowserPreference": "Reduction set by your browser",
     "createdWith": "This portfolio was built with",
     "createdWithSuffix": "with Vue and CSS.",
     "iconsPrefix": "The icons used are from the",

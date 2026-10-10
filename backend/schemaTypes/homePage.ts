@@ -71,6 +71,25 @@ export default defineType({
   fields: [
     localizedPortableText('hero', 'Texto do hero'),
     localizedResume,
+    // NOVO CAMPO: Lista de Cargos reordenável e localizada
+    defineField({
+      name: 'roles',
+      title: 'Cargos / Habilidades',
+      type: 'array',
+      description: 'Adicione os cargos e arraste para reordenar.',
+      of: [
+        defineArrayMember({
+          type: 'object',
+          fields: [
+            defineField({name: 'pt', title: 'Português', type: 'string', validation: rule => rule.required()}),
+            defineField({name: 'en', title: 'English', type: 'string'}),
+          ],
+          preview: {
+            select: { title: 'pt' }
+          }
+        })
+      ],
+    }),
   ],
   preview: {
     prepare() {

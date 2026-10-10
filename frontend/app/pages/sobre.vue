@@ -4,6 +4,7 @@ import { useFetch, useI18n, useLocalePath } from '#imports'
 
 const { locale, t } = useI18n()
 const localePath = useLocalePath()
+const { isReducedMotion } = useReducedMotion()
 
 type AboutData = {
   currentFocus?: Array<{title: any}>
@@ -94,8 +95,8 @@ const clientItems = computed(() =>
     <!-- Seção de Introdução -->
     <Motion
       as="section"
-      :initial="{ y: 30, opacity: 0 }"
-      :enter="{ y: 0, opacity: 1, transition: { duration: 400, ease: [0.33, 1, 0.68, 1] } }"
+      :initial="isReducedMotion ? undefined : { y: 30, opacity: 0 }"
+      :enter="isReducedMotion ? undefined : { y: 0, opacity: 1, transition: { duration: 400, ease: [0.33, 1, 0.68, 1] } }"
       class="about-hero"
     >
       <h1>{{ t('about.title') }}</h1>
@@ -113,8 +114,8 @@ const clientItems = computed(() =>
     <!-- Seção de Experiência -->
     <Motion
       as="section"
-      :initial="{ y: 30, opacity: 0 }"
-      :enter="{ y: 0, opacity: 1, transition: { duration: 400, delay: 100, ease: [0.33, 1, 0.68, 1] } }"
+      :initial="isReducedMotion ? undefined : { y: 30, opacity: 0 }"
+      :enter="isReducedMotion ? undefined : { y: 0, opacity: 1, transition: { duration: 400, delay: 100, ease: [0.33, 1, 0.68, 1] } }"
       class="resume-section"
     >
       <h2>{{ t('about.experienceTitle') }}</h2>
@@ -142,8 +143,8 @@ const clientItems = computed(() =>
     <!-- Seção de Educação -->
     <Motion
       as="section"
-      :initial="{ y: 30, opacity: 0 }"
-      :enter="{ y: 0, opacity: 1, transition: { duration: 400, delay: 200, ease: [0.33, 1, 0.68, 1] } }"
+      :initial="isReducedMotion ? undefined : { y: 30, opacity: 0 }"
+      :enter="isReducedMotion ? undefined : { y: 0, opacity: 1, transition: { duration: 400, delay: 200, ease: [0.33, 1, 0.68, 1] } }"
       class="resume-section"
     >
       <h2>{{ t('about.educationTitle') }}</h2>
@@ -168,8 +169,8 @@ const clientItems = computed(() =>
     <!-- Seção de Pesquisa -->
     <Motion
       as="section"
-      :initial="{ y: 30, opacity: 0 }"
-      :enter="{ y: 0, opacity: 1, transition: { duration: 400, delay: 300, ease: [0.33, 1, 0.68, 1] } }"
+      :initial="isReducedMotion ? undefined : { y: 30, opacity: 0 }"
+      :enter="isReducedMotion ? undefined : { y: 0, opacity: 1, transition: { duration: 400, delay: 300, ease: [0.33, 1, 0.68, 1] } }"
       class="resume-section"
     >
       <h2>{{ t('about.researchTitle') }}</h2>
@@ -195,8 +196,8 @@ const clientItems = computed(() =>
     <Motion
       v-if="clientItems.length"
       as="section"
-      :initial="{ y: 30, opacity: 0 }"
-      :enter="{ y: 0, opacity: 1, transition: { duration: 400, delay: 400, ease: [0.33, 1, 0.68, 1] } }"
+      :initial="isReducedMotion ? undefined : { y: 30, opacity: 0 }"
+      :enter="isReducedMotion ? undefined : { y: 0, opacity: 1, transition: { duration: 400, delay: 400, ease: [0.33, 1, 0.68, 1] } }"
       class="resume-section"
     >
       <h2>{{ t('about.clientsTitle') }}</h2>
@@ -208,8 +209,8 @@ const clientItems = computed(() =>
     <!-- Seção CTA (Call to Action) Final -->
     <Motion
       as="section"
-      :initial="{ y: 30, opacity: 0 }"
-      :enter="{ y: 0, opacity: 1, transition: { duration: 400, delay: 400, ease: [0.33, 1, 0.68, 1] } }"
+      :initial="isReducedMotion ? undefined : { y: 30, opacity: 0 }"
+      :enter="isReducedMotion ? undefined : { y: 0, opacity: 1, transition: { duration: 400, delay: 400, ease: [0.33, 1, 0.68, 1] } }"
       class="full-width cta-about-section"
       id="cta"
     >

@@ -3,17 +3,12 @@ export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   app: {
     head: {
-      title: 'Fellipe Mayan ✸ Portfólio',
+      title: 'Fellipe Mayan ✸ Designer Digital',
     },
   },
   css: ['~/assets/css/main.css'],
-  devtools: { enabled: true },
-  modules: ['@nuxtjs/i18n', '@nuxt/image', '@vueuse/motion/nuxt', '@nuxtjs/sanity'],
-  sanity: {
-    projectId: process.env.NUXT_PUBLIC_SANITY_PROJECT_ID || 'ef2ein8t',
-    dataset: process.env.NUXT_PUBLIC_SANITY_DATASET || 'production',
-    apiVersion: '2026-09-30',
-  },
+  devtools: { enabled: false },
+  modules: ['@nuxtjs/i18n', '@nuxt/image', '@vueuse/motion/nuxt'],
   runtimeConfig: {
     sanityApiReadToken: process.env.SANITY_API_READ_TOKEN || '',
     sanityProjectId: process.env.NUXT_PUBLIC_SANITY_PROJECT_ID || 'ef2ein8t',
@@ -22,12 +17,18 @@ export default defineNuxtConfig({
   },
   i18n: {
     locales: [
-      { code: 'pt', name: 'Português', file: 'pt.json' },
-      { code: 'en', name: 'English', file: 'en.json' }
+      { code: 'pt', name: 'Português', iso: 'pt-BR', file: 'pt.json' },
+      { code: 'en', name: 'English', iso: 'en-US',  file: 'en.json' }
     ],
     langDir: 'locales',
     defaultLocale: 'pt',
-    strategy: 'prefix_except_default',
-    detectBrowserLanguage: false      
+    detectBrowserLanguage: {
+      useCookie: true,
+      cookieKey: 'i18n_redirected',
+      redirectOn: 'root',
+      alwaysRedirect: false,
+      fallbackLocale: 'en' 
+    },
+    strategy: 'prefix_except_default' 
   }
 })
