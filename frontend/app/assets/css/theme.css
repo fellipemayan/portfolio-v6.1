@@ -1,58 +1,62 @@
 :root {
   color-scheme: light dark;
 
-  --color-yellow: oklch(0.86 0.1705 88.22);
-  --color-yellow-light: oklch(0.98 0.15 89.22);
-  --color-yellow-dark: oklch(0.7 0.2 70);
-  --color-yellow-darker: oklch(55% 0.2 70);
+  /* =========================================
+    MATIZES BASE POR HORÁRIO
+  ========================================= */
+  --hue-morning: 350;
+  --hue-day: 250;
+  --hue-evening: 45;
+  --hue-night: 90;
 
-  --color-primary: light-dark(var(--color-yellow-darker), var(--color-yellow));
+  /* Fallback inicial para dia */
+  --hue-time: var(--hue-day);
 
-  --color-black: oklch(0.1 0.01 200);
-  --color-white: oklch(0.99 0.01 200);
+  /* =========================================
+    CORES RELATIVAS
+  ========================================= */
+  --color-time-base: light-dark(oklch(65% 0.15 var(--hue-time)), oklch(75% 0.15 var(--hue-time)));
+  --color-time-muted: light-dark(oklch(93% 0.05 var(--hue-time)), oklch(30% 0.05 var(--hue-time)));
+  --color-time-muted-hover: light-dark(oklch(90% 0.08 var(--hue-time)), oklch(40% 0.08 var(--hue-time)));
+  --color-time-strong: light-dark(oklch(50% 0.15 var(--hue-time)), oklch(85% 0.18 var(--hue-time)));
+  --color-time-background: light-dark(oklch(0.99 0.005 var(--hue-time)), oklch(0.15 0.01 var(--hue-time)));
+  --color-time-background-muted: light-dark(oklch(0.96 0.01 var(--hue-time)), oklch(0.19 0.01 var(--hue-time)));
 
-  /* Cores: modo claro */
-  --color-bg-base: light-dark(oklch(0.9911 0 0), oklch(0.15 0.01 200));
-  --color-bg-base-hover: light-dark(oklch(0.96 0 0), oklch(0.19 0.01 200));
-  --color-bg-secondary: light-dark(oklch(0.94 0 200), oklch(0.2 0.01 200));
-  --color-bg-secondary-hover: light-dark(
-    oklch(0.90 0.01 200),
-    oklch(0.3 0.01 200)
-  );
+  /* =========================================
+     CORES ESTÁTICAS E RE-ATRIBUIÇÕES
+     ========================================= */
+  --color-primary: var(--color-time-base);
 
-  --color-border: light-dark(oklch(0.8 0.01 90), oklch(0.3 0.01 200));
+  --color-black: oklch(0.1 0.01 var(--hue-time)));
+  --color-white: oklch(0.99 0.01 var(--hue-time)));
+
+  --color-bg-base: var(--color-time-background);
+  --color-bg-base-hover: var(--color-time-background-muted);
+  --color-bg-secondary: light-dark(oklch(0.94 0 var(--hue-time)), oklch(0.2 0.01 var(--hue-time)));
+  --color-bg-secondary-hover: light-dark(oklch(0.90 0.01 var(--hue-time)), oklch(0.3 0.01 var(--hue-time)));
+
+  --color-border: light-dark(oklch(0.9 0.01 var(--hue-time)), oklch(0.3 0.01 var(--hue-time)));
   --color-border-overlay: light-dark(
-    oklch(0.1 0.01 200) / 0.5,
-    oklch(1 0.01 200) / 0.5
+    oklch(0.2 0.01 var(--hue-time) / 0.2), 
+    oklch(1 0.01 var(--hue-time) / 0.9)
   );
+  --color-text-base: light-dark(oklch(0.3 0.01 var(--hue-time)), oklch(0.93 0.01 var(--hue-time)));
+  --color-text-hover: light-dark(oklch(0.2 0.01 var(--hue-time)), oklch(0.9 0.01 var(--hue-time)));
+  --color-text-heading: light-dark(oklch(0.1 0.01 var(--hue-time)), oklch(0.98 0.01 var(--hue-time)));
+  --color-text-muted: light-dark(oklch(0.4 0.01 var(--hue-time)), oklch(0.7 0.01 var(--hue-time)));
+  --color-text-primary: light-dark(var(--color-time-base), var(--color-time-strong));
 
-  --color-text-base: light-dark(oklch(0.3 0.01 200), oklch(0.93 0.01 200));
-  --color-text-hover: light-dark(oklch(0.1 0.01 200), oklch(0.98 0.01 200));
-  --color-text-heading: light-dark(oklch(0.1 0.01 200), oklch(0.98 0.01 200));
-  --color-text-muted: light-dark(oklch(0.4 0.01 200), oklch(0.7 0.01 200));
-  --color-text-primary: light-dark(
-    var(--color-yellow-darker),
-    var(--color-yellow)
-  );
+  --color-surface-primary: var(--color-text-heading);
+  --color-surface-primary-hover: var(--color-text-base);
+  --color-text-surface-primary: var(--color-bg-base);
 
-  --color-surface-primary: light-dark(oklch(0.15 0.01 200), oklch(0.98 0.01 90));
-
-  --color-surface-primary-hover: light-dark(
-    oklch(0.1 0.01 200),
-    oklch(0.95 0.01 90)
-  );
-  --color-text-surface-primary: light-dark(
-    oklch(0.95 0.01 90),
-    oklch(0.1 0.01 200)
-  );
-
-  --color-surface-secondary: var(--color-bg-base);
-  --color-surface-secondary-hover: var(--color-bg-base-hover);
+  --color-surface-secondary: var(--color-time-muted);
+  --color-surface-secondary-hover: var(--color-time-muted-hover);
   --color-text-surface-secondary: var(--color-text-base);
   --color-text-surface-secondary-hover: var(--color-text-hover);
 
-  --color-selection-bg: var(--color-yellow);
-  --color-selection-text: var(--color-black);
+  --color-selection-bg: var(--color-time-muted);
+  --color-selection-text: var(--color-time-strong);
 
   /* Espaçamento */
   --spacing-2xs: 0.125rem;
@@ -87,18 +91,28 @@
 
   /* Grid */
   --padding-inline: var(--spacing-xl);
-  --content-max-width: 60ch;
+  --content-max-width: 70ch;
   --breakout-max-width: 120ch;
-  --breakout-size: calc(
-    (var(--breakout-max-width) - var(--content-max-width)) / 2
-  );
+  --breakout-size: calc((var(--breakout-max-width) - var(--content-max-width)) / 2);
 
   --header-height: 56px;
   --gap-xs: 0.25rem;
   --gap-sm: 1.25rem;
   --gap-md: 2rem;
   --gap-lg: 3rem;
-  --gap-xl: 6rem;
+  --gap-xl: 4rem;
+}
+
+html.theme-morning {
+  --hue-time: var(--hue-morning);
+}
+
+html.theme-evening {
+  --hue-time: var(--hue-evening);
+}
+
+html.theme-night {
+  --hue-time: var(--hue-night);
 }
 
 :root[data-theme='light'],
@@ -113,6 +127,31 @@
   p {
     font-weight: 300;
   }
+}
+
+html {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-time-muted) transparent;
+}
+
+/* Motores Webkit (Chrome, Edge, Safari) */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px; 
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--color-time-muted);
+  border-radius: 4px;
+  border: 2px solid var(--color-bg-base); 
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--color-time-base);
 }
 
 @media (min-width: 768px) {

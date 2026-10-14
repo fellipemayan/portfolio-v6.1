@@ -3,6 +3,10 @@
 @import './typography.css';
 @import './grid.css';
 
+* {
+  transition: background-color var(--transition-medium), color var(--transition-medium);
+}
+
 /* Resets */
 ul {
   list-style: none;
@@ -24,7 +28,7 @@ a {
 
   &:hover {
     text-decoration: underline;
-    color: var(--color-text-primary);
+    color: var(--color-time-strong);
   }
 }
 
@@ -36,12 +40,12 @@ a {
   padding-block: var(--spacing-sm);
   padding-inline: var(--spacing-lg);
   border-radius: var(--spacing-lg);
-  /* font-family: var(--font-family-mono); */
   font-size: var(--font-size-md);
   text-decoration: none;
   text-wrap: nowrap;
   height: 2.5em;
   cursor: pointer;
+  user-select: none;
 
   &:has(.icon-md)&:not(.icon-only) {
     padding-left: calc(var(--spacing-md) - var(--spacing-xs));
@@ -65,17 +69,17 @@ a {
 }
 .secondary-btn,
 .secondary-cta {
-  background-color: var(--color-bg-base);
-  border: 1px solid var(--color-border);
-  color: var(--color-text-surface-secondary) !important;
+  background-color: var(--color-surface-secondary);
+  color: var(--color-text-surface-secondary);
   text-decoration: none !important;
   transition:
     background-color var(--transition-medium),
     color var(--transition-medium);
 
   &:hover {
+    /* background-color: var(--color-surface-secondary-hover); */
     background-color: var(--color-surface-secondary-hover);
-    color: var(--color-text-hover);
+    color: var(--color-text-surface-secondary-hover);
   }
 
   &:has(.icon-md)&:not(.icon-only) {
@@ -93,8 +97,7 @@ a {
     color var(--transition-medium);
 
   &:hover {
-    background-color: var(--color-bg-base-hover);
-    color: var(--color-text-hover);
+    background-color: var(--color-time-muted);
   }
 }
 

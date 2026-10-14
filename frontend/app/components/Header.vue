@@ -1,36 +1,32 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
-import { useI18n, useLocalePath } from '#imports'
-import { useColorMode, useWindowScroll } from '@vueuse/core'
+import { useI18n, useLocalePath, useCookie } from '#imports'
+import { useColorMode } from '@vueuse/core'
 import { Bars3Icon, MoonIcon, SunIcon, LanguageIcon } from '@heroicons/vue/20/solid'
 
 const route = useRoute()
 const { t, locale, setLocale } = useI18n()
 const localePath = useLocalePath()
+
+// 1. Apenas o cookie do idioma aqui
+const langCookie = useCookie('i18n_redirected', { maxAge: 31536000 })
+const themeCookie = useCookie('theme-preference', { maxAge: 31536000 })
+
+// O VueUse cuida do tema no cliente
 const colorMode = useColorMode({
   attribute: 'data-theme',
-  initialValue: 'auto',
   modes: { light: 'light', dark: 'dark' }
 })
 
+// Sincroniza a escolha com o cookie para o servidor ler depois
+watch(colorMode, (newMode) => {
+  themeCookie.value = newMode
+})
+
 const isMounted = ref(false)
-const isDark = computed(() => colorMode.state.value === 'dark')
+const isDark = computed(() => colorMode.value === 'dark')
 const isAvailableForWork = ref(true)  
-
-const shouldAnimateHeader = useState('header-should-animate', () => true)
-const { isReducedMotion } = useAnimationPreferences() 
-
-const runAnimation = shouldAnimateHeader.value && !isReducedMotion.value
-
-// 2. Se for falso (navegação), fixamos o estado estático já na posição final (visível)
-const motionInitial = runAnimation 
-  ? { y: '-100%', opacity: 0 } 
-  : { y: '0%', opacity: 1 }
-
-const motionEnter = runAnimation 
-  ? { y: '0%', opacity: 1, transition: { duration: 400, ease: [0.33, 1, 0.68, 1] } } 
-  : { y: '0%', opacity: 1 }
 
 const navLinks = ref([
   { key: 'projects', path: '/' },
@@ -49,26 +45,19 @@ const toggleTheme = () => {
   colorMode.value = isDark.value ? 'light' : 'dark'
 }
 
-const toggleLanguage = () => {
+const toggleLanguage = async () => {
   const nextLocale = locale.value === 'pt' ? 'en' : 'pt'
-  setLocale(nextLocale)
+  await setLocale(nextLocale)
+  langCookie.value = nextLocale
 }
 
 onMounted(() => {
   isMounted.value = true
-  if (shouldAnimateHeader.value) {
-    shouldAnimateHeader.value = false
-  }
 })
 </script>
 
 <template>
-  <Motion
-    is="header"
-    class="site-header content-grid"
-    :initial="motionInitial"
-    :enter="motionEnter"
-  >
+    <header class="site-header content-grid slide-down">
     <div class="left">
       <NuxtLink 
         :to="localePath('/')" 
@@ -82,21 +71,6 @@ onMounted(() => {
         <span class="status-dot"></span>
       </div>
     </div>
-
-    <nav class="middle-right">
-      <ul class="header-nav">
-        <li v-for="item in navLinks" :key="item.path">
-          <NuxtLink
-            :to="localePath(item.path)"
-            exact-active-class="active"
-            @click="(e) => (e.currentTarget as HTMLElement).blur()"
-          >
-            {{ t(`nav.${item.key}`) }}
-          </NuxtLink>
-        </li>
-      </ul>
-      
-    </nav>
 
     <div class="options right">
       <button 
@@ -127,17 +101,39 @@ onMounted(() => {
     </div>
 
     <MobileMenu :nav-links="navLinks" />
-  </Motion>
+    </header>
 </template>
 
 <style scoped>
 .site-header {
   z-index: 10;
-  padding-block: var(--spacing-sm);
-  background: var(--color-bg-base);
+  /* TODO: bg em telas menores */
+  padding-block: var(--spacing-sm); 
   position: sticky;
   top: 0;
   align-items: center;
+}
+
+@keyframes slideDownOnce {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.slide-down {
+  animation: slideDownOnce 400ms cubic-bezier(0.33, 1, 0.68, 1) forwards;
+}
+
+/* Respeito por acessibilidade */
+@media (prefers-reduced-motion: reduce) {
+  .slide-down {
+    animation: none;
+  }
 }
 
 .header-name {
@@ -151,18 +147,6 @@ onMounted(() => {
   display: flex;
   gap: var(--spacing-sm);
   justify-content: flex-end;
-}
-
-.header-nav {
-  display: flex;
-  align-items: center;
-  list-style: none;
-  text-wrap: nowrap;
-  gap: var(--spacing-md);
-}
-
-nav {
-  display: none;
 }
 
 .lang-btn {
@@ -180,7 +164,7 @@ nav {
   justify-content: center;
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 1280px) {
   nav {
     display: block;
   }

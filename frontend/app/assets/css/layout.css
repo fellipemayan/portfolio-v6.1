@@ -19,7 +19,9 @@ body {
   }
 }
 
-main {
+main, footer {
+  position: relative;
+  z-index: 2;
   background-color: var(--color-bg-base);
 }
 
@@ -35,7 +37,7 @@ main > section {
     margin-bottom: var(--gap-md);
   }
 
-  &:first-child {
+  &:first-child, &:nth-child(2) {
     margin-top: var(--gap-xl);
 
     @media (max-width: 728px) {
@@ -49,4 +51,10 @@ main > section {
   align-items: center;
   justify-content: space-between;
   margin-bottom: var(--gap-md);
+}
+
+.actions {
+  display: flex;
+  gap: var(--spacing-md);
+  margin-top: var(--gap-md);
 }

@@ -1,7 +1,7 @@
 const queries = {
   currentFocus: '*[_type == "currentFocus" && isVisible != false] | order(order asc, _createdAt asc){title}',
   experiences: '*[_type == "professionalExperience" && isVisible != false] | order(order asc, startDate desc){title, company, employmentType, location, startDate, endDate, isCurrent, description, "logoUrl": logo.asset->url, "logoAlt": logo.alt}',
-  education: '*[_type == "educationEntry" && isVisible != false] | order(order asc, startDate desc){title, institution, startDate, endDate, isCurrent, description}',
+  education: '*[_type == "educationEntry" && isVisible != false] | order(order asc, startDate desc){title, degree, institution, startDate, endDate, isCurrent, description, "logoUrl": logo.asset->url, "logoAlt": logo.alt}',
   research: '*[_type == "researchEntry" && isVisible != false] | order(order asc, publicationYear desc){title, event, location, publicationYear, description, publicationUrl}',
   clients: '*[_type == "clientEntry" && isVisible != false] | order(name.pt asc){name}',
 }

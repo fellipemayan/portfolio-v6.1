@@ -22,6 +22,15 @@ const localePath = useLocalePath()
 
 <template>
   <div class="colophon content-grid">
+    <nav class="footer-nav left">
+      <ul>
+        <li><NuxtLink to="/">{{ t('nav.projects') }}</NuxtLink></li>
+        <li><NuxtLink to="/sobre">{{ t('nav.about') }}</NuxtLink></li>
+        <li><NuxtLink to="/contato">{{ t('nav.contact') }}</NuxtLink></li>
+      </ul>
+    </nav>
+
+    <div class="half-center">
       <p>
         {{ t('footer.createdWith') }} <a href="https://nuxt.com" target="_blank">Nuxt.js</a> {{ t('footer.createdWithSuffix') }}
       <!-- </p>
@@ -37,14 +46,16 @@ const localePath = useLocalePath()
         <NuxtLink :to="localePath('/changelog')">{{ t('footer.changelog') }}</NuxtLink> | :)
       </p>
     </div>
-  </template>
+  </div>
+</template>
 
-<style>
+<style scoped>
 .colophon {  
   position: sticky;
   bottom: 0;
-  z-index: -10;
-  background-color: var(--color-bg-secondary);
+  z-index: 1;
+  /* background-color: var(--color-bg-secondary); */
+  background-color: var(--color-time-background-muted);
   padding-block: var(--gap-lg);
 
   p {
@@ -67,6 +78,21 @@ const localePath = useLocalePath()
       text-decoration: underline;
       &:hover {
         text-decoration-style: wavy;
+      }
+    }
+  }
+}
+
+nav ul {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+
+  li {
+    a {
+      z-index: 10;
+      &:hover {
+        text-decoration: wavy underline;
       }
     }
   }

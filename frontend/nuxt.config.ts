@@ -8,7 +8,7 @@ export default defineNuxtConfig({
   },
   css: ['~/assets/css/main.css'],
   devtools: { enabled: false },
-  modules: ['@nuxtjs/i18n', '@nuxt/image', '@vueuse/motion/nuxt'],
+  modules: ['@nuxtjs/i18n', '@nuxt/image', '@vueuse/motion/nuxt', '@nuxtjs/color-mode'],
   runtimeConfig: {
     sanityApiReadToken: process.env.SANITY_API_READ_TOKEN || '',
     sanityProjectId: process.env.NUXT_PUBLIC_SANITY_PROJECT_ID || 'ef2ein8t',

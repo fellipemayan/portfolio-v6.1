@@ -110,7 +110,7 @@ const hasVerticalImage = computed(() => {
         :href="mainExternalLink"
         target="_blank"
         rel="noopener noreferrer"
-        class="btn secondary-btn icon-btn active-link-badge"
+        class="btn primary-btn icon-btn active-link-badge"
         :aria-label="t('home.viewExternal', 'Ver projeto externo')"
       >
         <ArrowTopRightOnSquareIcon class="icon-md" />
@@ -197,6 +197,11 @@ const hasVerticalImage = computed(() => {
   transition: all 0.2s ease;
 }
 
+.icon-md {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
 .project-card:hover .active-link-badge {
   opacity: 1;
   transform: scale(1);
@@ -253,7 +258,7 @@ const hasVerticalImage = computed(() => {
   font-size: var(--font-size-xs, 0.75rem);
   font-family: var(--font-family-mono);
   padding: 0.2rem 0.6rem;
-  background: var(--color-bg-secondary);
+  background-color: var(--color-time-background-muted);
   border-radius: 4px;
   text-transform: uppercase;
 }

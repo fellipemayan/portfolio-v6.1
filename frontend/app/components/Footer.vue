@@ -88,7 +88,7 @@ const weatherIcon = computed(() => {
 
 <template>
   <footer class="content-grid">
-    <p class="half-left">
+    <p class="copyright left">
       &copy; {{ new Date().getFullYear() }} Fellipe Mayan. {{ t('footer.copyright') }} 
     </p>
 
@@ -114,6 +114,10 @@ footer {
   background-color: var(--color-bg-base);
   border-top: 1px solid var(--color-border);
   padding-block: var(--spacing-lg);
+}
+
+.copyright {
+  text-wrap: nowrap;
 }
 
 .social-links {

@@ -4,6 +4,21 @@ import { ArrowUpIcon } from '@heroicons/vue/20/solid'
 
 const { y } = useWindowScroll()
 const { height } = useWindowSize()
+const themeCookie = useCookie('theme-preference')
+const { timeThemeClass } = useTimeTheme()
+
+useHead(() => ({
+  htmlAttrs: {
+    class: timeThemeClass.value,
+    'data-theme': themeCookie.value || 'light'
+  }
+}))
+
+const mainLinks = [
+  { key: 'projects', path: '/', isTranslationKey: true },
+  { key: 'about', path: '/sobre', isTranslationKey: true },
+  { key: 'contact', path: '/contato', isTranslationKey: true }
+]
 
 const showScrollToTop = computed(() => y.value > height.value)
 
@@ -19,6 +34,7 @@ const scrollToTop = () => {
   <div class="app-wrapper">
     <Header />
     <main class="main-content content-grid">
+      <SiteNavigation :links="mainLinks" class="main-sidebar left" />
       <slot />
     </main>
     <Footer />

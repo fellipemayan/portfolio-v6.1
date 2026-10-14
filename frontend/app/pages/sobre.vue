@@ -4,7 +4,6 @@ import { useFetch, useI18n, useLocalePath } from '#imports'
 
 const { locale, t } = useI18n()
 const localePath = useLocalePath()
-const { isReducedMotion } = useReducedMotion()
 
 type AboutData = {
   currentFocus?: Array<{title: any}>
@@ -24,8 +23,7 @@ const getLocalized = (value: any) => {
 
 const formatDate = (value?: string) => {
   if (!value) return ''
-  return new Intl.DateTimeFormat(locale.value, {month: 'short', year: 'numeric'}).format(new Date(`${value}T00:00:00`))
-}
+  return new Intl.DateTimeFormat(locale.value, { year: 'numeric' }).format(new Date(`${value}T00:00:00`))}  
 
 const currentEndeavorItems = computed(() => {
   if (aboutData.value?.currentFocus?.length) {
@@ -44,11 +42,8 @@ const experienceItems = computed(() => {
       startDate: formatDate(item.startDate),
       endDate: formatDate(item.endDate),
       isCurrent: item.isCurrent,
-      description: getLocalized(item.description),
-      logo: item.logoUrl ? {
-        src: item.logoUrl,
-        alt: getLocalized(item.logoAlt),
-      } : undefined,
+      logoUrl: item.logoUrl || '',
+      logoAlt: getLocalized(item.logoAlt) || '',
     }))
   }
 
@@ -59,11 +54,14 @@ const educationItems = computed(() => {
   if (aboutData.value?.education?.length) {
     return aboutData.value.education.map((item: any) => ({
       title: getLocalized(item.title),
+      degree: getLocalized(item.degree),
       institution: getLocalized(item.institution),
       startDate: formatDate(item.startDate),
       endDate: formatDate(item.endDate),
       isCurrent: item.isCurrent,
       description: getLocalized(item.description),
+      logoUrl: item.logoUrl || item.logo?.asset?.url || '',
+      logoAlt: getLocalized(item.logoAlt) || '',
     }))
   }
 
@@ -88,142 +86,203 @@ const researchItems = computed(() => {
 const clientItems = computed(() =>
   aboutData.value?.clients?.map((item: any) => getLocalized(item.name)) || [],
 )
+
+const { slideUp } = useAnimations()
+
 </script>
 
 <template>
-  <div class="about-page">
-    <!-- Seção de Introdução -->
-    <Motion
-      as="section"
-      :initial="isReducedMotion ? undefined : { y: 30, opacity: 0 }"
-      :enter="isReducedMotion ? undefined : { y: 0, opacity: 1, transition: { duration: 400, ease: [0.33, 1, 0.68, 1] } }"
-      class="about-hero"
-    >
-      <h1>{{ t('about.title') }}</h1>
-      <p>
-        {{ t('about.introBeforeYears') }} <span data-cursor-text="!">{{ t('about.years') }}</span> {{ t('about.introAfterYears') }}
-      </p>
-      <p>{{ t('about.endeavorsIntro') }}</p>
-      <ul class="endeavors-list">
-        <li v-for="(endeavor, index) in currentEndeavorItems" :key="index">
-          {{ endeavor }}
-        </li>
-      </ul>
-    </Motion>
+  <section
+    class="hero-section"
+  >
+    <h1 v-motion="slideUp(0)">{{ t('about.title') }}</h1>
+    <p v-motion="slideUp(100)">
+      {{ t('about.introBeforeYears') }} <span data-cursor-text="!">{{ t('about.years') }}</span> {{ t('about.introAfterYears') }}
+    </p>
+    <p v-motion="slideUp(200)">{{ t('about.endeavorsIntro') }}</p>
+    <ul class="endeavors-list">
+      <li v-for="(endeavor, index) in currentEndeavorItems" :key="index" v-motion="slideUp(300+index*50)">
+        {{ endeavor }}
+      </li>
+    </ul>
+  </section>
 
-    <!-- Seção de Experiência -->
-    <Motion
-      as="section"
-      :initial="isReducedMotion ? undefined : { y: 30, opacity: 0 }"
-      :enter="isReducedMotion ? undefined : { y: 0, opacity: 1, transition: { duration: 400, delay: 100, ease: [0.33, 1, 0.68, 1] } }"
-      class="resume-section"
-    >
-      <h2>{{ t('about.experienceTitle') }}</h2>
-      <ul class="resume-list">
-        <li v-for="(experience, index) in experienceItems" :key="index" class="resume-item">
-          <img v-if="experience.logo" :src="experience.logo.src" :alt="experience.logo.alt || experience.company" class="resume-logo" />
-          <div class="item-header">
-            <h3>{{ experience.title }}</h3>
-            <p class="metadata-duration">
-              {{ experience.startDate }} - {{ experience.isCurrent ? t('about.present') : experience.endDate }}
-            </p>
-          </div>
-          <div class="info">
-            <p class="metadata">
-              <span>{{ experience.company }}</span>
-              <span>{{ experience.type }}</span>
-              <span>{{ experience.location }}</span>
-            </p>
-            <p class="description">{{ experience.description }}</p>
-          </div>
-        </li>
-      </ul>
-    </Motion>
+  <section class="resume-section half-left">
+    <h2 v-motion="slideUp(0)">{{ t('about.experienceTitle') }}</h2>
+    <ul class="resume-list">
+      <li v-for="(experience, index) in experienceItems" :key="index" class="resume-item" v-motion="slideUp(100+index*50)">
+        <div class="item-header">
+          <img v-if="experience.logoUrl" :src="experience.logoUrl" :alt="experience.company" class="company-logo" />
+          <h3>{{ experience.company }}</h3>
 
-    <!-- Seção de Educação -->
-    <Motion
-      as="section"
-      :initial="isReducedMotion ? undefined : { y: 30, opacity: 0 }"
-      :enter="isReducedMotion ? undefined : { y: 0, opacity: 1, transition: { duration: 400, delay: 200, ease: [0.33, 1, 0.68, 1] } }"
-      class="resume-section"
-    >
-      <h2>{{ t('about.educationTitle') }}</h2>
-      <ul class="resume-list">
-        <li v-for="(edu, index) in educationItems" :key="index" class="resume-item">
-          <div class="item-header">
-            <h3>{{ edu.title }}</h3>
-            <p class="metadata-duration">
-              {{ edu.startDate }} - {{ edu.isCurrent ? t('about.present') : edu.endDate }}
-            </p>
-          </div>
-          <div class="info">
-            <p class="metadata">
-              <span>{{ edu.institution }}</span>
-            </p>
-            <p class="description">{{ edu.description }}</p>
-          </div>
-        </li>
-      </ul>
-    </Motion>
+          <span class="item-dutarion">{{ experience.startDate }} - {{ experience.isCurrent ? t('about.present') : experience.endDate }}</span>
+        </div>
+        <ul class="metadata">
+          <li>{{ experience.title }}</li>
+          <li>{{ experience.location }}</li>
+        </ul>
+      </li>
+    </ul>
+  </section>
 
-    <!-- Seção de Pesquisa -->
-    <Motion
-      as="section"
-      :initial="isReducedMotion ? undefined : { y: 30, opacity: 0 }"
-      :enter="isReducedMotion ? undefined : { y: 0, opacity: 1, transition: { duration: 400, delay: 300, ease: [0.33, 1, 0.68, 1] } }"
-      class="resume-section"
-    >
-      <h2>{{ t('about.researchTitle') }}</h2>
-      <ul class="resume-list">
-        <li v-for="(item, index) in researchItems" :key="index" class="resume-item">
-          <h3>{{ item.title }}</h3>
-          <div class="info">
-            <p class="metadata">
-              <span class="first-item">{{ item.event }}</span>
-              <span>{{ item.location }}</span>
-              <span>{{ item.publicationYear }}</span>
-            </p>
-            <p class="description">{{ item.description }}</p>
-            <a v-if="item.publicationUrl" :href="item.publicationUrl" target="_blank" rel="noopener noreferrer" class="external-link">
-              {{ t('about.viewPublication') }}
-            </a>
-          </div>
-        </li>
-      </ul>
-    </Motion>
+  <section
+    v-if="educationItems.length"
+    class="resume-section half-right"
+  >
+  <h2 v-motion="slideUp(0)">{{ t('about.educationTitle') }}</h2>
+    <ul class="resume-list">
+      <li v-for="(edu, index) in educationItems" :key="index" class="resume-item" v-motion="slideUp(100+index*50)">
+        <div class="item-header">
+          <img v-if="edu.logoUrl" :src="edu.logoUrl" :alt="edu.logoAlt || edu.institution" class="company-logo" />
+          <h3>{{ edu.institution }}</h3>
+          <span class="item-dutarion">{{ edu.startDate }} - {{ edu.isCurrent ? t('about.present') : edu.endDate }}</span class="item-dutarion">
+        </div>
+          <ul class="metadata">
+          <li>{{ edu.title }}</li>
+          <li>{{ edu.degree }}</li>
+        </ul>
+      </li>
+    </ul>
+  </section>
 
-    <!-- Seção de Clientes -->
-    <Motion
-      v-if="clientItems.length"
-      as="section"
-      :initial="isReducedMotion ? undefined : { y: 30, opacity: 0 }"
-      :enter="isReducedMotion ? undefined : { y: 0, opacity: 1, transition: { duration: 400, delay: 400, ease: [0.33, 1, 0.68, 1] } }"
-      class="resume-section"
-    >
-      <h2>{{ t('about.clientsTitle') }}</h2>
-      <ul class="client-list">
-        <li v-for="client in clientItems" :key="client">{{ client }}</li>
-      </ul>
-    </Motion>
+  <!-- <section
+    v-if="researchItems.length"
+    class="resume-section"
+  >
+    <h2>{{ t('about.researchTitle') }}</h2>
+    <ul class="resume-list">
+      <li v-for="(item, index) in researchItems" :key="index" class="resume-item">
+        <h3>{{ item.title }}</h3>
+        <div class="info">
+          <p class="metadata">
+            <span class="first-item">{{ item.event }}</span>
+            <span>{{ item.location }}</span>
+            <span>{{ item.publicationYear }}</span>
+          </p>
+          <p class="description">{{ item.description }}</p>
+          <a v-if="item.publicationUrl" :href="item.publicationUrl" target="_blank" rel="noopener noreferrer" class="external-link">
+            {{ t('about.viewPublication') }}
+          </a>
+        </div>
+      </li>
+    </ul>
+  </section> -->
 
-    <!-- Seção CTA (Call to Action) Final -->
-    <Motion
-      as="section"
-      :initial="isReducedMotion ? undefined : { y: 30, opacity: 0 }"
-      :enter="isReducedMotion ? undefined : { y: 0, opacity: 1, transition: { duration: 400, delay: 400, ease: [0.33, 1, 0.68, 1] } }"
-      class="full-width cta-about-section"
-      id="cta"
-    >
-      <h2>{{ t('about.ctaTitle') }}</h2>
-      <p>{{ t('about.ctaDescription') }}</p>
-      <div class="cta-actions">
-        <NuxtLink :to="localePath('/contato')" class="btn primary-btn">
-          {{ t('about.ctaContact') }}
-        </NuxtLink>
-        <NuxtLink :to="localePath('/projetos')" class="btn secondary-btn">
-          {{ t('home.viewProjects') }}
-        </NuxtLink>
-      </div>
-    </Motion>
-  </div>
+  <section
+    class="resume-section"
+  >
+    <div class="resume-header">
+      <h2 v-motion="slideUp(0)">{{ t('about.clientsTitle') }}</h2>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+    </div>
+    <ul class="client-list">
+      <li v-for="client in clientItems" :key="client" v-motion="slideUp(100)">{{ client }}</li>
+    </ul>
+  </section>
+
+  <section
+    class="cta-about-section"
+    id="cta"
+  >
+    <h2 v-motion="slideUp(0)">{{ t('about.ctaTitle') }}</h2>
+    <p class="about-descriprion" v-motion="slideUp(100)">{{ t('about.ctaDescription') }}</p>
+    <div class="actions" v-motion="slideUp(200)">
+      <NuxtLink :to="localePath('/contato')" class="btn primary-btn">
+        {{ t('about.ctaContact') }}
+      </NuxtLink>
+      <NuxtLink :to="localePath('/projetos')" class="btn secondary-btn">
+        {{ t('home.viewProjects') }}
+      </NuxtLink>
+    </div>
+  </section>
 </template>
+
+
+<style scoped>
+.endeavors-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+
+  li {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    &::before {
+      content: '⬩';
+      color: var(--color-time-strong);
+      font-weight: bold;
+      display: inline-block;
+      margin-right: var(--spacing-sm);
+    }
+  }
+}
+
+.company-logo {
+  width: 1.25rem;
+  height: 1.25rem;
+  object-fit: contain;
+  border-radius: 0.25rem;
+  border: 1px solid var(--color-border-overlay);
+}
+
+.resume-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+
+  h3 {
+    font-size: var(--font-size-md);
+  }
+
+  > li {
+    display: flex;
+    flex-direction: column;
+    padding-bottom: var(--spacing-sm);
+    
+    &:not(:last-child) {
+      border-bottom: 1px solid var(--color-border);
+   }
+}
+}
+
+.item-header {
+  display: flex;
+  gap: var(--spacing-sm);
+  align-items: flex-end;
+
+  .item-dutarion {
+    margin-left: auto;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+  }
+}
+
+.resume-item > ul {
+  margin-top: var(--spacing-sm);
+  display: flex;
+  color: var(--color-text-muted);
+}
+
+.metadata {
+  display: flex;
+  gap: var(--spacing-sm);
+  font-size: var(--font-size-sm);
+
+  li:not(:last-child)::after {
+    content: '/';
+    margin-left: var(--spacing-sm);
+  }
+}
+
+.client-list {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--gap-md);
+}
+
+@media (max-width: 768px) {
+  .half-left, .half-right {
+    grid-column: content;
+  }
+}
+</style>

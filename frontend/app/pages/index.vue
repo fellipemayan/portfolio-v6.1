@@ -78,7 +78,6 @@ const localizedRoles = computed(() => {
   return rawRoles.map((role: any) => getLocalized(role))
 })
 
-
 const resumeUrl = computed(() => homePage.value?.resume?.[locale.value as 'pt' | 'en'] || homePage.value?.resume?.pt || '/files/cv-fellipe-mayan.pdf')
 
 const heroPortableTextComponents = {
@@ -93,41 +92,27 @@ const heroPortableTextComponents = {
   },
 }
 
-const { isReducedMotion } = useAnimationPreferences()
+const { slideUp } = useAnimations()
 
-const slideUp = (delay = 0) => {
-  if (isReducedMotion.value) return undefined
-  
-  return {
-    initial: { y: 40, opacity: 0 },
-    visibleOnce: { 
-      y: 0, 
-      opacity: 1, 
-      transition: { 
-        duration: 400, 
-        delay, 
-        ease: [0.33, 1, 0.68, 1] 
-      } 
-    }
-  }
-}
 </script>
 
 <template>
     <!-- Seção Hero com Animação -->
-    <section class="hero-section" v-motion="slideUp(0)">
-      <template v-if="localizedHeroContent.length">
-        <PortableText :value="localizedHeroContent" :components="heroPortableTextComponents" />
-      </template>
-      <template v-else>
-        <h1 class="hero-title">{{ t('home.fallbackTitle') }}</h1>
-      </template>
+    <section class="hero-section">
+      <div class="hero-text-wrapper" v-motion="slideUp(0)">
+        <template v-if="localizedHeroContent.length">
+          <PortableText :value="localizedHeroContent" :components="heroPortableTextComponents" />
+        </template>
+        <template v-else>
+          <h1 class="hero-title">{{ t('home.fallbackTitle') }}</h1>
+        </template>
+      </div>
       <ul v-if="localizedRoles.length" class="skills-list">
-      <li v-for="(role, index) in localizedRoles" :key="index">
+      <li v-for="(role, index) in localizedRoles" :key="index" v-motion="slideUp(100)">
         {{ role }}
       </li>
     </ul>
-      <div class="actions">
+      <div class="actions" v-motion="slideUp(200)">
         <NuxtLink :to="localePath('/contato')" class="btn primary-btn">
           {{ t('home.enterInContact') }}
         </NuxtLink>
@@ -138,36 +123,18 @@ const slideUp = (delay = 0) => {
     </section>
 
     <!-- Seção de Projetos em Destaque com Animação em Cascata -->
-    <section class="featured-section" v-motion="slideUp(150)">
-      <h2>{{ t('home.featuredProjects') }}</h2>
+    <section class="featured-section">
+      <h2 v-motion="slideUp(0)">{{ t('home.featuredProjects') }}</h2>
 
       <ul class="projects-grid">
-        <li v-for="project in featuredProjects" :key="project.slug">
+        <li v-motion="slideUp(100)" v-for="project in featuredProjects" :key="project.slug">
           <ProjectCard :project="project" layout="grid" />
         </li>
       </ul>
     </section>
-
-    <!-- <section class="cta-section" v-motion="slideUp(300)">
-      <h2 class="cta-title">
-        {{ t('home.ctaTitle') }}
-      </h2>
-      <p class="cta-description">
-        {{ t('home.ctaDescription') }}
-      </p>
-      <div class="actions">
-        <NuxtLink :to="localePath('/contato')" class="btn primary-btn">
-          {{ t('home.ctaContact') }}
-        </NuxtLink>
-        <NuxtLink :to="localePath('/projetos')" class="btn secondary-btn">
-          {{ t('home.viewProjects') }}
-        </NuxtLink>
-      </div>
-    </section> -->
 </template>
 
 <style scoped>
-
 .skills-list {
   display: flex;
   flex-wrap: wrap;
@@ -184,13 +151,6 @@ const slideUp = (delay = 0) => {
   }
 }
 
-.actions {
-  display: flex;
-  gap: var(--spacing-md);
-  margin-top: var(--gap-md);
-}
-
-
 .featured-section {
   display: flex;
   flex-direction: column;
@@ -204,6 +164,5 @@ const slideUp = (delay = 0) => {
 
 .view-all-link {
   text-decoration: none;
-  /* transform: translateX(var(--spacing-lg)); */
 }
 </style>
