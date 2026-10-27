@@ -18,8 +18,8 @@
   --color-time-base: light-dark(oklch(65% 0.15 var(--hue-time)), oklch(75% 0.15 var(--hue-time)));
   --color-time-muted: light-dark(oklch(93% 0.05 var(--hue-time)), oklch(30% 0.05 var(--hue-time)));
   --color-time-muted-hover: light-dark(oklch(90% 0.08 var(--hue-time)), oklch(40% 0.08 var(--hue-time)));
-  --color-time-strong: light-dark(oklch(50% 0.15 var(--hue-time)), oklch(85% 0.18 var(--hue-time)));
-  --color-time-background: light-dark(oklch(0.99 0.005 var(--hue-time)), oklch(0.15 0.01 var(--hue-time)));
+  --color-time-strong: light-dark(oklch(50% 0.15 var(--hue-time)), oklch(95% 0.18 var(--hue-time)));
+  --color-time-background: light-dark(oklch(0.99 0.005 var(--hue-time)), oklch(0.13 0.005 var(--hue-time)));
   --color-time-background-muted: light-dark(oklch(0.96 0.01 var(--hue-time)), oklch(0.19 0.01 var(--hue-time)));
 
   /* =========================================
@@ -32,13 +32,13 @@
 
   --color-bg-base: var(--color-time-background);
   --color-bg-base-hover: var(--color-time-background-muted);
-  --color-bg-secondary: light-dark(oklch(0.94 0 var(--hue-time)), oklch(0.2 0.01 var(--hue-time)));
+  --color-bg-secondary: light-dark(oklch(0.94 0.01 var(--hue-time)), oklch(0.2 0.01 var(--hue-time)));
   --color-bg-secondary-hover: light-dark(oklch(0.90 0.01 var(--hue-time)), oklch(0.3 0.01 var(--hue-time)));
 
-  --color-border: light-dark(oklch(0.9 0.01 var(--hue-time)), oklch(0.3 0.01 var(--hue-time)));
+  --color-border: light-dark(oklch(0.8 0.01 var(--hue-time)), oklch(0.3 0.01 var(--hue-time) / 0.4));
   --color-border-overlay: light-dark(
     oklch(0.2 0.01 var(--hue-time) / 0.2), 
-    oklch(1 0.01 var(--hue-time) / 0.9)
+    oklch(1 0.01 var(--hue-time) / 0.4)
   );
   --color-text-base: light-dark(oklch(0.3 0.01 var(--hue-time)), oklch(0.93 0.01 var(--hue-time)));
   --color-text-hover: light-dark(oklch(0.2 0.01 var(--hue-time)), oklch(0.9 0.01 var(--hue-time)));
@@ -86,8 +86,8 @@
 
   /* Animações */
   --transition-fast: 150ms ease-out;
-  --transition-medium: 300ms cubic-bezier(0.85, 0.09, 0.15, 0.91);
-  --transition-slow: 500ms ease-out;
+  --transition-medium: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-fast: 150ms ease;
 
   /* Grid */
   --padding-inline: var(--spacing-xl);

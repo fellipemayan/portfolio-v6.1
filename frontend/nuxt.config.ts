@@ -14,6 +14,9 @@ export default defineNuxtConfig({
     sanityProjectId: process.env.NUXT_PUBLIC_SANITY_PROJECT_ID || 'ef2ein8t',
     sanityDataset: process.env.NUXT_PUBLIC_SANITY_DATASET || 'production',
     sanityApiVersion: '2026-09-30',
+    public: {
+      formspreeId: process.env.NUXT_PUBLIC_FORMSPREE_ID || ''
+    }
   },
   i18n: {
     locales: [

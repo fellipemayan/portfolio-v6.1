@@ -41,8 +41,22 @@ watch(() => route.path, () => {
   }
 })
 
-const toggleTheme = () => {
-  colorMode.value = isDark.value ? 'light' : 'dark'
+// const toggleTheme = () => {
+//   colorMode.value = isDark.value ? 'light' : 'dark'
+// }
+const toggleTheme = (event?: MouseEvent) => {
+  const nextTheme = isDark.value ? 'light' : 'dark'
+
+  // Caso o navegador não suporte View Transitions, muda normalmente
+  if (!document.startViewTransition) {
+    colorMode.value = nextTheme
+    return
+  }
+
+  // Anima a transição da árvore do DOM de forma nativa e fluida
+  document.startViewTransition(() => {
+    colorMode.value = nextTheme
+  })
 }
 
 const toggleLanguage = async () => {
