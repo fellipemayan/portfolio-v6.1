@@ -32,6 +32,18 @@ const localizedText = (name: string, title: string) =>
     ],
   })
 
+const localizedImageFields = [
+  defineField({
+    name: 'alt',
+    title: 'Texto alternativo',
+    type: 'object',
+    fields: [
+      defineField({name: 'pt', title: 'Português', type: 'string'}),
+      defineField({name: 'en', title: 'English', type: 'string'}),
+    ],
+  })
+]
+
 export default defineType({
   name: 'educationEntry',
   title: 'Formação acadêmica',
@@ -39,6 +51,7 @@ export default defineType({
   icon: DocumentTextIcon,
   fields: [
     localizedString('title', 'Curso ou formação', true),
+    localizedString('degree', 'Grau (ex: Bacharelado, Técnico, Pós-graduação)'),
     localizedString('institution', 'Instituição', true),
     defineField({
       name: 'startDate',
@@ -46,6 +59,13 @@ export default defineType({
       type: 'date',
       options: {dateFormat: 'MM/YYYY'},
       validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: 'logo',
+      title: 'Logo',
+      type: 'image',
+      options: {hotspot: true},
+      fields: localizedImageFields,
     }),
     defineField({
       name: 'endDate',
@@ -78,7 +98,8 @@ export default defineType({
   preview: {
     select: {
       title: 'title.pt',
-      subtitle: 'institution.pt',
+      subtitle: 'degree.pt',
+      media: 'logo',
     },
   },
 })

@@ -41,6 +41,14 @@ export default defineType({
       options: {dateFormat: 'DD/MM/YYYY'},
       validation: (rule) => rule.required(),
     }),
+    // NOVO CAMPO: Disponibilidade para trabalho
+    defineField({
+      name: 'isAvailableForWork',
+      title: 'Disponível para trabalho',
+      description: 'Ative se estiver a aceitar novos projetos. Se desativado, o formulário de contacto mostrará um aviso.',
+      type: 'boolean',
+      initialValue: true,
+    }),
     defineField({
       name: 'socialLinks',
       title: 'Links de redes sociais',
@@ -86,11 +94,13 @@ export default defineType({
     select: {
       title: 'version',
       subtitle: 'lastUpdated',
+      isAvailable: 'isAvailableForWork'
     },
-    prepare({title, subtitle}: {title?: string; subtitle?: string}) {
+    prepare({title, subtitle, isAvailable}: {title?: string; subtitle?: string; isAvailable?: boolean}) {
+      const status = isAvailable ? '🟢 Disponível' : '🔴 Indisponível'
       return {
         title: title ? `Versão ${title}` : 'Configurações do site',
-        subtitle,
+        subtitle: `${status} - Atualizado em ${subtitle}`,
       }
     },
   },
